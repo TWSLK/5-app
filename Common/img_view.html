@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=3,user-scalable=yes" />
+		<link href="../Common/css/mui.min.css" rel="stylesheet" />
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<style type="text/css">
+			body {
+				height: min-content;
+				background: transparent;
+			}
+
+			#image {
+				display: block;
+			}
+
+			#Bg {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: -1;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="Bg" onclick="CloseWindow();"></div>
+		<img id="image" onclick="CloseWindow();" />
+	</body>
+
+	<script type="text/javascript">
+		var loc, current;
+		mui.init();
+		mui.plusReady(function() {
+			current = plus.webview.currentWebview();
+			loc = current.loc;
+			console.log(loc);
+			document.getElementById('image').src = loc;
+			document.getElementById('image').onload = function() {
+				document.getElementById('image').style.width = window.innerWidth + "px";
+				document.getElementById('image').style.marginTop = (window.innerHeight - window.innerWidth) / 2 + "px";
+				current.show("fade-in", 500);
+			}
+		});
+
+		function CloseWindow() {
+			plus.webview.currentWebview().close();
+		}
+	</script>
+
+</html>

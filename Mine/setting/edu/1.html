@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../../../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../../../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../../../Common/js/mui.min.js"></script>
+		<script src="../../../Common/js/jump.js"></script>
+		<script src="../../../Common/js/tools.js"></script>
+		<script src="../../../Common/js/table_list.js"></script>
+		<script src="../../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script src="../../../Common/js/lib/materialize.min.js"></script>
+		<link href="../../../Common/css/lib/materialize.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			html {
+				background-color: #EEEEEE;
+			}
+			.Card {
+				padding: 4vw 6vw 2vw;
+			}
+
+			.School_name {
+				font-size: 5vw;
+				width: 100%;
+				margin-bottom: 2vw;
+			}
+
+			#SchoolList,
+			#BadPage {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 消息卡片模板 -->
+		<div class="temp" id="SchoolTemplate">
+			<li class="mui-table-view-cell Card waves-effect" quesId="0">
+				<div class="School_name">山西大学</div>
+			</li>
+		</div>
+		<!-- 顶栏 -->
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<p id="Title">选择学校</p>
+		</header>
+		<!-- 消息列表 -->
+		<div class="Content Fixed">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" id="SchoolList">
+					</ul>
+				</div>
+			</div>
+			<div id="BadPage" style="text-align: center; color: gray;">
+				<h5>网络错误</h5>
+				<h5>请检查网络连接后重新加载</h5>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var UserHash;
+		var Current;
+		var SchoolList = document.getElementById("SchoolList");
+
+		mui.init();
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll();
+			Current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem("userHash");
+			DoShow(Current);
+			showList();
+		});
+
+		function showList() {
+			DoWait();
+			CallAJAX('listSchool', {}, function(data) { // success
+				DontWait();
+				BadPage.style.display = "none";
+
+				for (let i in data["schoolsList"]) {
+					setTimeout(function() {
+						addSchoolCard(data["schoolsList"][i], 0);
+					}, 50 * i);
+				}
+			}, function() { // error
+				DontWait();
+				SchoolList.style.display = "none";
+				BadPage.style.display = "block";
+			});
+		}
+
+		function addSchoolCard(school) {
+			var newSchool = document.getElementById("SchoolTemplate").lastElementChild.cloneNode(true);
+
+			newSchool.setAttribute("schoolid", school["schoolId"].toString());
+			newSchool.onclick = function() {
+				nextPage(parseInt(newSchool.getAttribute("schoolid")));
+			}
+			newSchool.getElementsByClassName("School_name")[0].innerText = school["schoolName"];
+			SchoolList.appendChild(newSchool);
+			newSchool.classList.add("Done");
+
+			SchoolList.style.display = "block";
+		}
+		
+		function nextPage(schoolId) {
+			plus.webview.create('2.html', 'SetEdu-2', {}, {
+				'schoolId': schoolId,
+			});
+		}
+		
+	</script>
+
+</html>

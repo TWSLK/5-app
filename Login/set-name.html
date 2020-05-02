@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>设置用户名</title>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="../Common/css/ufun.css" type="text/css" rel="stylesheet"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		</head>
+	</head>
+	
+	<style type="text/css">
+		body{
+			font-family: "Source Han Sans CN";
+			background-color: #fff;
+			overflow-x:hidden;
+			overflow-y:hidden;
+			padding-left: env(safe-area-inset-left);
+			padding-right: env(safe-area-inset-right);
+		}
+		
+		.circle-x {
+			background: var(--color-yellow);
+			position: fixed;
+			overflow: hidden;
+		}
+		
+		#Circle2 {
+			left: -10vh;
+			top: -10vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle4 {
+			right: -6vh;
+			top: -6vh;
+			width: 13vh;
+			height: 13vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle5 {
+			right: -7vh;
+			top: 4.5vh;
+			width: 10vh;
+			height: 10vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle6 {
+			right: -11vh;
+			bottom: -5vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle7 {
+			right: -5vh;
+			bottom: -13vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle8 {
+			left: -3vh;
+			bottom: -10vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle9 {
+			left: -10vh;
+			bottom: -3vh;
+			width: 14vh;
+			height: 14vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		.name-picture{
+			text-align: center;
+			margin: 10vh auto 0 auto;
+		}
+		
+		@-webkit-keyframes fadeInOut {
+		  0% {
+		    opacity: 0;
+			width: 0%;
+		  }
+		  50% {
+		    opacity: 1;
+			width: 75%;
+		  }
+		  75% {
+		    opacity: 1;
+			width: 100%;
+		  }
+		}
+		
+		.name-picture {
+		  -webkit-animation-name: fadeInOut;
+		  -webkit-animation-timing-function: ease-in-out;
+		  -webkit-animation-iteration-count: 1;
+		  -webkit-animation-duration: 3s;
+		  -webkit-animation-direction: alternate;
+		}
+		
+		@-webkit-keyframes fadeInOut {
+		  0% {
+		    opacity: 0;
+			width: 0%;
+		  }
+		  50% {
+		    opacity: 1;
+			width: 80%;
+		  } 
+		}
+		
+		#inpt, .set-btn, .set-steps{
+		  -webkit-animation-name: fadeInOut;
+		  -webkit-animation-timing-function: ease-in-out;
+		  -webkit-animation-iteration-count: 1;
+		  -webkit-animation-duration: 3s;
+		  -webkit-animation-direction: alternate;
+		}
+		
+		.main-title {
+			text-align: center;
+			margin-top: 9vh;
+		}
+		
+		.main-title a {
+			color: #4B4A48;
+			font-size: 5vw;
+		}
+		
+		.name-picture img{
+			width: 30vh;
+		}
+		
+		#inpt {
+			text-align: center;
+			float: none;
+			text-align: center;
+			width: 80%;
+			color: #CDCDCD;
+		}
+		
+		
+		.col {
+			margin: 5vh auto 0 auto;
+		}
+		
+		.set-btn-container {
+			margin: 2.9vh auto 0 auto;
+			text-align: center;
+		}
+		
+		.set-btn {
+			width: 80%;
+			height: 5.5vh;
+			background: var(--color-yellow) !important;
+			box-shadow: none !important;
+			border-radius: 4.8vh;
+			border-style: none;
+			color: #4b4a48;
+			font-size: 3vw;
+			align-items: center;
+		}
+		
+		/* label color */
+		.input-field label {
+		   color: #CDCDCD;
+		}
+
+		/* icon prefix focus color */
+		.input-field .prefix.active {
+			color: var(--color-yellow);
+		}
+		
+		.input-field input:focus {
+			border-bottom: 1px solid var(--color-yellow) !important;
+			box-shadow: 0 1px 0 0 var(--color-yellow) !important;
+		}
+		
+		.input-field label.active {
+			color: var(--color-yellow) !important;
+		}
+		
+		.set-steps {
+			text-align: center;
+			align-items: center;
+			width: 80%;
+			margin: 1vh auto 3vh auto;
+			display: flex;
+			
+		}
+		
+		.set-steps div{
+			text-align: center;
+			margin: 1vh auto 1vh auto;
+		}
+
+		
+		#Step1 {
+			background: var(--color-yellow);
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			margin-left: 10vh;
+			
+		}
+		
+		#Step2 {
+			background: #CDCDCD;
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			
+		}
+		
+		#Step3 {
+			background: #CDCDCD;
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			margin-right: 10vh;
+		}
+		
+	</style>
+	
+	<body>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		
+		<div class="name-picture">
+			<img src="img/undraw_profile_data_mk6k.svg" >
+		</div>
+		
+		<div class="circle-container">
+			<div id="Circle2" class="circle-x"></div>
+			<div id="Circle3" class="circle-x"></div>
+			<div id="Circle4" class="circle-x"></div>
+			<div id="Circle5" class="circle-x"></div>
+			<div id="Circle6" class="circle-x"></div>
+			<div id="Circle7" class="circle-x"></div>
+			<div id="Circle8" class="circle-x"></div>
+			<div id="Circle9" class="circle-x"></div>
+		</div>
+		
+		<div class="main-title">
+			<a>牛人，你怎么称呼？</a>
+		</div>
+		
+		 <div class="row">
+		    <form class="col s12">
+		      <div class="row">
+		        <div class="input-field col s6" id="inpt">
+		          <input id="UserName" type="text" class="validate" data-length="12" maxlength="12" onkeydown="if(event.keyCode==13){event.keyCode=0;event.returnValue=false;}">
+		          <label for="UserName" id="NameLable">输入用户名</label>
+		        </div>
+		      </div>
+		</form>
+		</div>
+		
+		<!--第一个监测输入内容的字数
+		    isInputNull检测用户名是否有非法符号或者空格-->
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function(){
+				const counter = document.querySelectorAll("input#UserName");
+				M.CharacterCounter.init(counter);
+			})
+			
+			function isInputNull(){
+				var str=document.getElementById("UserName").value;
+				var reg = RegExp(/[`~!@#$%^&*()_|+\-=?;:'",. <>\{\}\[\]\\\/]/);
+					if(str=="" || str == null){
+						alert("必须填写用户名哦");
+						return false;
+					} else if(reg.test(str)){
+						alert("不能使用非法符号");
+					} else {
+						var next = document.next;
+						next.action="set-school.html";
+						next.submit();
+					}
+			} 
+		</script>
+			
+		<form name="next" class="set-btn-container" method="get" onsubmit="isInputNull();return false;" action="set_school.html">
+		    <button type="submit" class="set-btn">下一步</button>
+		</form>
+		
+		<div class="set-steps">
+			<div id="Step1"></div>
+			<div id="Step2"></div>
+			<div id="Step3"></div>
+		</div>
+		
+	</body>
+
+</html>

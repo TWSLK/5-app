@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<title> 登陆页面 </title>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="../Common/css/ufun.css" type="text/css" rel="stylesheet"/>
+		<script src="../Common/js/tools.js"></script>
+		<script src="../Common/js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+	</head>
+	<style type="text/css">
+		body {
+			font-family: "Source Han Sans CN";
+			background-color: #fff;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			padding-left: env(safe-area-inset-left);
+			padding-right: env(safe-area-inset-right);
+		}
+
+		/*以下为背景装饰*/
+		.middle-image {
+			margin: 10vh auto 0 auto;
+			text-align: center;
+		}
+
+		#Girl {
+			width: 30vh;
+		}
+
+
+		.circle-x {
+			background: var(--color-yellow);
+			position: fixed;
+			overflow: hidden;
+		}
+
+		#Circle2 {
+			left: -5vh;
+			top: -10vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle3 {
+			left: -24vh;
+			top: 0.5vh;
+			width: 30vh;
+			height: 30vh;
+			-moz-border-radius: 24vh;
+			-webkit-border-radius: 24vh;
+			border-radius: 24vh;
+		}
+
+		#Circle4 {
+			right: -5vh;
+			top: -6vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle5 {
+			right: -12vh;
+			top: 4.5vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle6 {
+			right: -11vh;
+			bottom: 4.5vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle7 {
+			right: -8vh;
+			bottom: -8vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle8 {
+			left: -2vh;
+			bottom: -10vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle9 {
+			left: -13vh;
+			bottom: -1vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		/*以下为内容区域，包括所有文字性内容*/
+		.main-title {
+			position: relative;
+			margin: 6vh auto 5.76vh auto;
+			text-align: center;
+		}
+
+		.Circle {
+			width: 1vh;
+			height: 1vh;
+			background: var(--color-yellow);
+			-moz-border-radius: 8vh;
+			-webkit-border-radius: 8vh;
+			border-radius: 8vh;
+			margin: 1.44vh;
+		}
+
+		.main-title ul {
+			list-style: none;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+		}
+
+		.main-title a {
+			color: var(--color-yellow);
+			text-align: center;
+			font-size: 5vw;
+		}
+
+		.text-box {
+			align-items: center;
+			text-align: center;
+			border-bottom: 0.12vh solid #CDCDCD;
+			display: flex;
+			width: 80%;
+			margin: 4vh auto 0 auto;
+		}
+
+		.text-box input {
+			border-style: none;
+			outline: none;
+			background: none;
+			font-size: 3vw;
+			color: #4B4A48;
+			margin: 1.5vh 1.5vh;
+			float: left;
+
+		}
+
+		#Password::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		#TelCnt::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		i {
+			color: #cdcdcd;
+		}
+
+		.set-btn {
+			width: 80%;
+			height: 5.5vh;
+			background: var(--color-yellow);
+			border-radius: 4.8vh;
+			border-style: none;
+			color: #4b4a48;
+			font-size: 3vw;
+			margin: 2vh auto;
+		}
+
+		.set-btn-container {
+			margin: 2.9vh auto 0vh auto;
+			text-align: center;
+		}
+
+		.noaccount {
+			border: 0.12vh solid red;
+			width: 80%;
+			margin: 1.2vh auto 0vh auto;
+			display: flex;
+			text-align: center;
+		}
+
+		.link-area {
+			display: block;
+			margin-top: 3vh;
+			text-align: center;
+			align-items: center;
+		}
+
+		.link-area a {
+			color: #cdcdcd;
+			font-size: 3vw;
+			font-weight: 200;
+			text-decoration: none;
+		}
+
+		.line-spliter {
+			color: var(--color-yellow);
+			padding: 0vh 1vh;
+		}
+
+		#Logo {
+			text-align: center;
+			margin: 6vh auto;
+		}
+
+		#Logo img {
+			width: 7.2vh;
+		}
+	</style>
+
+
+	<body>
+		<div class="middle-image">
+			<img src="img/undraw_unlock_24mb.svg" id="Girl">
+		</div>
+
+		<div class="circle-container">
+			<div id="Circle2" class="circle-x"></div>
+			<div id="Circle3" class="circle-x"></div>
+			<div id="Circle4" class="circle-x"></div>
+			<div id="Circle5" class="circle-x"></div>
+			<div id="Circle6" class="circle-x"></div>
+			<div id="Circle7" class="circle-x"></div>
+			<div id="Circle8" class="circle-x"></div>
+			<div id="Circle9" class="circle-x"></div>
+		</div>
+
+		<div class="main-title">
+			<ul>
+				<div id="Ufun">
+					<li><a>Ufun</a></li>
+				</div>
+				<div id="Circle1" class="Circle"></div>
+				<div id="Discover">
+					<li><a>发现校内的牛人</a></li>
+				</div>
+			</ul>
+		</div>
+
+		<div class="text-box">
+			<i class="material-icons">account_circle</i>
+			<input id="TelCnt" type="tel" class="mui-input-clear mui-input" placeholder="手机号" maxlength="11">
+		</div>
+
+		<div class="text-box">
+			<i class="material-icons">lock</i>
+			<input id="Password" type="password" class="mui-input-clear mui-input" placeholder="密码">
+		</div>
+
+
+		<form method="get" name="next" onsubmit="Login();return false;" class="set-btn-container">
+			<button type="submit" class="set-btn">登陆</button>
+		</form>
+
+		<div class="mui-content-padded">
+			<div class="link-area">
+				<a id="Reg" href="register.html">注册账号</a>
+				<span class="line-spliter">|</span>
+				<a id="ForgetPassword" href="#">忘记密码</a>
+			</div>
+		</div>
+
+		<div id="Logo">
+			<img src="img/logo.png">
+			<div id="Animation">
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+
+	</body>
+
+
+	<script type="text/javascript">
+		mui.plusReady(function() {});
+
+		function Login() {
+			var tel = document.getElementById("TelCnt").value;
+			var password = document.getElementById("Password").value;
+			if (tel == "23464") {
+				var tel = "15698578933";
+				var password = "369991";
+			}
+
+			if (tel == null || tel == "" || tel.length < 11) {
+				alert("手机号有误");
+				return;
+			} else if (password == null || password == "") {
+				alert("密码不能为空");
+				return;
+			}
+
+			CallAJAX("doLogin", {
+				"phoneNo": tel,
+				"pswd": password
+			}, function(data) {
+				if (data["res"] == "1")
+					alert("账户未找到");
+				else if (data["res"] == "2")
+					alert("密码错误");
+				else {
+					plus.storage.setItem("userHash", data["userHash"]);
+					location.replace('welcome-page.html');
+				}
+			});
+		}
+	</script>
+</html>

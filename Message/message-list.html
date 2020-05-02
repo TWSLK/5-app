@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/jump.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<script src="../Common/js/table_list.js"></script>
+		<script src="../Common/js/nav_bar.js"></script>
+		<script type="text/javascript" src="../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../Common/css/lib/materialize.min.css">
+		<script src="../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			.msg-head-img {
+				float: left;
+				height: 15vw;
+				width: 15vw;
+				border: 1px solid #DDDDDD;
+				border-radius: 100%;
+			}
+
+			.msg-content {
+				/* float: left; */
+				margin-left: 18vw;
+				width: calc(100% - 20vw);
+			}
+
+			.msg-title {
+				font-weight: bold;
+				font-size: 4.5vw;
+				margin-bottom: 1vw;
+			}
+
+			.msg-text {
+				font-size: 4vw;
+				color: #888888;
+				word-wrap: break-word;
+				padding-bottom: 2vw;
+			}
+
+			.msg-send-time {
+				position: absolute;
+				bottom: 0;
+				right: 2vw;
+				font-size: 3vw;
+			}
+
+			.msg-red {
+				position: absolute;
+				border-radius: 100%;
+				background-color: red;
+				width: 3vw;
+				height: 3vw;
+				right: 2vw;
+				top: 2vw;
+			}
+
+			.msg-seen * {
+				opacity: 0.6;
+			}
+
+			.msg-seen .msg-red {
+				display: none;
+			}
+
+			.msg-seen .msg-head-img {
+				opacity: 0.2;
+			}
+
+			#MsgList,
+			#BadPage {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 消息卡片模板 -->
+		<div class="temp" id="MsgTemplate">
+			<li class="mui-table-view-cell Card waves-effect" msgId="0">
+				<div class="msg-red"></div>
+				<img class="msg-head-img" id="MsgHeadImg" />
+				<div class="msg-content">
+					<div class="msg-text" id="MsgTitle">您的提问有新的回答申请</div>
+					<div class="msg-text" id="MsgText">快去看看吧</div>
+				</div>
+				<p class="msg-send-time" id="MsgSendT">2018/04/19 18:32</p>
+			</li>
+		</div>
+		<!-- 顶栏 -->
+		<header>
+			<p id="Title">消息</p>
+			<div id="Right" class="BTN" onmouseup="showList(0);">
+				<i class="material-icons">refresh</i>
+			</div>
+		</header>
+		<!-- 消息列表 -->
+		<div class="Content Fixed">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" id="MsgList">
+					</ul>
+				</div>
+			</div>
+			<div id="BadPage" style="text-align: center; color: gray;">
+				<h5>网络错误</h5>
+				<h5>请检查网络连接后重新加载</h5>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var userHash;
+		var current;
+		var lastMsgId = 0;
+		var msgIsEnd = false;
+		var msgList = document.getElementById("MsgList");
+
+		var title = {
+			'0': '新的回答申请',
+			'1': '收到新回答',
+			'2': '问题已过期',
+			'10': '已被指定回答问题',
+			'11': '收到新追问',
+			'12': '回答已被采纳',
+		}
+
+		mui.init({
+			beforeback: function() {
+				//屏蔽 默认退出函数 并绑定到 退出整个应用的退出函数 上
+				//所有在主界面中嵌套的页面都需要填写此字段
+				MyBeforeBack();
+				return false;
+			}
+		});
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll(function() {
+				if (!InRefresh)
+					showList(0);
+			}, function() {
+				if (!InRefresh && !msgIsEnd)
+					showList(lastMsgId);
+			});
+			current = plus.webview.currentWebview();
+			userHash = plus.storage.getItem("userHash");
+			DoShow(current);
+			showList();
+		});
+
+		function showList(id) {
+			InRefresh = true;
+			id = id ? id : 0;
+			if (id == 0) {
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 0);
+			}
+			DoWait();
+			// AJAX: listMsg
+			CallAJAX('listMsg', JSON.stringify({
+				"userHash": userHash,
+				"lastMsgId": id
+			}), function(data) { // success
+				DontWait();
+				InRefresh = false;
+				BadPage.style.display = "none";
+
+				if (id == 0) {
+					msgList.innerHTML = "";
+					lastMsgId = 0;
+				}
+
+				if (data["res"] != "ok") {
+					console.log("message load done.");
+					msgIsEnd = true;
+					return;
+				}
+				msgIsEnd = false;
+
+				let msgsCnt = msgList.children.length;
+				for (let i in data["msgsList"]) {
+					setTimeout(function() {
+						addMsgCard(data["msgsList"][i], MsgsCnt);
+					}, 50 * i);
+				}
+			}, function() { // error
+				DontWait();
+				InRefresh = false;
+				msgIsEnd = true;
+				msgList.style.display = "none";
+				BadPage.style.display = "block";
+				console.log("message load failed.");
+			});
+		}
+
+		function addMsgCard(msg, cnt) {
+			if (lastMsgId != 0 && msg["msgId"] >= lastMsgId)
+				return;
+			let newMsg = document.getElementById("MsgTemplate").lastElementChild.cloneNode(true);
+
+			newMsg.setAttribute("msgid", msg["msgId"].toString());
+			newMsg.setAttribute("quesid", msg["msgRelatedQuesId"].toString());
+			newMsg.setAttribute("userid", msg["msgRelatedUserId"].toString());
+			newMsg.onclick = function() {
+				JumpToQues(parseInt(newMsg.getAttribute("quesid")));
+				CallAJAX("visitMsg", {
+					"userHash": UserHash,
+					"msgId": parseInt(newMsg.getAttribute("msgid"))
+				}, function() {
+					// Do Nothing...
+				}, function() {
+					// Do Nothing...
+				})
+				newMsg.classList.add("msg-seen");
+			}
+			newMsg.getElementsByClassName("msg-head-img")[0].src = _ServerLoc + msg["msgRelatedUserHeadImgLoc"];
+			newMsg.getElementsByClassName("msg-title")[0].innerText = title[msg["msgType"].toString()];
+			newMsg.getElementsByClassName("msg-text")[0].innerText = "快去看看吧!";
+			newMsg.getElementsByClassName("msg-send-time")[0].innerText = String2Date(msg["msgSendT"], true);
+			if (msg["msgVisited"] == true)
+				newMsg.classList.add("msg-seen");
+			// newMsg.setAttribute("class", "mui-table-view-cell Card msg-seen");
+			msgList.appendChild(newMsg);
+			newMsg.classList.add("Done");
+
+
+			lastMsgId = msg["msgId"];
+			msgList.style.display = "block";
+		}
+	</script>
+
+</html>

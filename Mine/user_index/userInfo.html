@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<link href="../../Common/css/mui.min.css" rel="stylesheet" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/table_list.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<style>
+			header {
+				opacity: 1;
+				background: -webkit-linear-gradient(top, #808080, #A9A9A9, #87CEEB, #fff);
+			}
+
+			#HeaderContent {
+				position: absolute;
+				display: block;
+				height: 100vw;
+				width: 100vw;
+				bottom: 0;
+				border: 1px solid red;
+			}
+
+			#HeadImg {
+				position: absolute;
+				top: 10vw;
+				left: 8vw;
+				width: 20vw;
+				height: 20vw;
+				border-radius: 100vw;
+				border: 2px solid white;
+			}
+
+			#MineText {
+				position: absolute;
+				top: 8vh;
+				left: 35vw;
+				font-size: 23px;
+			}
+
+			#MineText a {
+				font-size: 13px;
+				color: orange;
+				text-decoration: underline;
+			}
+
+			#FansCnt {
+				margin: 1vw;
+				font-size: 4.5vw;
+			}
+
+			.top-info {
+				position: absolute;
+				top: 12vh;
+				left: 35vw;
+				width: 60vw;
+				font-size: 4.5vw;
+			}
+
+			.floattag {
+				float: left;
+				margin-top: 0.3vw;
+				margin-right: 1vw;
+				/* border:1px solid #ff0000; */
+			}
+
+			.floattag.big {
+				margin-top: 0;
+				font-size: 4vw;
+				line-height: 6.6vw;
+				color: black;
+				/* border:1px solid #ff0000; */
+				display: block;
+				width: 78vw;
+			}
+
+			.floattag.small,
+			#Star,
+			#FollowCnt {
+				margin-top: 0;
+				font-size: 3.5vw;
+				width: 20vw;
+				line-height: 6.6vw;
+				color: black;
+				margin-left: 5vw;
+				/* border:1px solid #ff0000; */
+			}
+
+			.number {
+				color: #fdd100 !important;
+				margin:1vw;
+				/* border:1px solid #ff0000; */
+			}
+
+			#HeaderFooter {
+				position: absolute;
+				height: 23vh;
+				width: 90vw;
+				background-color: #fff;
+				top: 20vh;
+				left: 5vw;
+				border-radius: 5vw;
+				/* border:1px solid #ff0000; */
+			}
+
+			.center-info {
+				position: absolute;
+				top: 2vh;
+				left: 6vw;
+				/* border:1px solid #ff0000; */
+				width: 78vw;
+				height: 20vh;
+			}
+
+			hr {
+				border-top: 1px solid #cdcdcd;
+				display: block;
+				height: 0;
+				margin: 1vw 0;
+			}
+
+			#Content {
+				/* border:1px solid #ff0000; */
+				position: absolute;
+				top: 80vw;
+				left: 0vw;
+				width: 100vw;
+				height: 40vh;
+				margin: 2vh 0;
+				border-radius: 5vw;
+				z-index: 102;
+				background-color: #fff;
+			}
+
+			#ContentText {
+				font-size: 4.5vw;
+				margin-left: 8vw;
+				margin-top: 2vh;
+			}
+
+			#EditIntro {
+				position: absolute;
+				right: 3vw;
+				top: 1vh;
+			}
+
+			#IntroText {
+				font-size: 4.5vw;
+				white-space: pre-wrap;
+				margin: 2vw 8vw;
+			}
+
+			#MineTitle {
+				font-size: 4vw;
+				margin-top: 12vw;
+				margin-left: 5vw;
+			}
+
+			#Follow {
+				position: absolute;
+				width: 13vw;
+				line-height: 4vh;
+				top: 8vh;
+				left: 78vw;
+				font-size: 3vw;
+				background-color: orange;
+				text-align: center;
+				display: inline-block;
+				border-radius:2vw;
+			}
+
+			#Identify {
+				position: absolute;
+				top: 8vh;
+				left: 48vw;
+				text-decoration: underline;
+				color: orange;
+				font-style: italic;
+			}
+			
+			#FollowBox{
+				position:absolute;
+				top:12vh;
+				left:55vw;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div id="Pull" style="display: none;"></div>
+		<header style="height: 100vw;" class="Black">
+			<div id="Left" class="BTN">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Right" class="BTN">
+				<i class="material-icons">more_horiz</i>
+			</div>
+			<div id="HeaderContent">
+				<div>
+					<img id="HeadImg" onclick="JumpToImgView(_ServerLoc + UserInfo['uHeadImgLoc']);" />
+					<p id="MineText">用户名 &nbsp; </p>
+					<a id="Identify">Funner认证</a>
+					<div class="top-info">
+						<div class="floattag big">粉丝<span id="FansCnt" class="number">1.2K&nbsp;</span></div>
+					</div>
+					<div id="FollowBox">
+						<div class="floattag big">关注<span id="FollowCnt" class="number">1.2K&nbsp;</span></div>
+					</div>
+				</div>
+				<div id="Follow" class="button waves-effect" onclick="clickFollow()">
+					+ &nbsp;关注
+				</div>
+			</div>
+			<div id="HeaderFooter">
+				<div class="center-info">
+					<div class="floattag big">综合评分&nbsp;<span id="Star" class="number">4.7&nbsp;</span></div>
+					<hr>
+					<div class="floattag small">正确度&nbsp;<span id="StarCrt" class="number">4.7&nbsp;</span></div>
+					<div class="floattag small">流畅度&nbsp;<span id="StarFln" class="number">4.7&nbsp;</span></div>
+					<div class="floattag small">易懂度&nbsp;<span id="StarClr" class="number">4.7&nbsp;</span></div>
+					<hr>
+					<div class="floattag big">解决问题&nbsp;<span id="AnsCnt" class="number">2K&nbsp;</span></div>
+					<hr>
+					<div class="floattag big">开办讲座&nbsp;<span id="SetLec" class="number">0&nbsp;</span></div>
+				</div>
+			</div>
+		</header>
+		<div id="Content">
+			<div id="ContentText">简介</div>
+			<a id="EditIntro" onclick="JumpToSetCV(UserInfo['uCV']);" class="Card-Tool">
+				<i class="material-icons">mode_edit</i>
+			</a>
+			<hr>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div id="MineTitle">个人简介</div>
+					<pre id="IntroText"></pre>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		var phoneNo; //手机号
+		var userHash; //cookie值
+		var userInfo; //当前所查看用户的UserInfo
+
+		mui.init({
+			beforeBack: function() {
+				//因为上级页面使用了自定义beforeBack函数
+				//所以此处必须重载为默认函数
+				return true;
+			},
+		});
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll(refreshPage);
+			//获取全局存储"userHash"和页面存储"phoneNo"
+			phoneNo = plus.webview.currentWebview().phoneNo;
+			userHash = plus.storage.getItem("userHash");
+			refreshPage();
+		});
+
+		window.addEventListener("refreshForUserIndex", function(e) {
+			refreshPage();
+		});
+
+		function refreshPage() {
+			function badPage() {
+				mui.alert("请稍后重试", "网络错误", function(e) {
+					DontWait();
+					plus.webview.currentWebview().close();
+				});
+			}
+			//AJAX: 通过phoneNo获取当前用户的所有信息
+			CallAJAX("getUserInfo", JSON.stringify({
+				"phoneNo": phoneNo,
+				"infoReqs": "all"
+			}), function(data) { // success函数
+				if (data["res"] != "ok") {
+					badPage();
+					return;
+				}
+				userInfo = data['userInfo'];
+				drawPage();
+			}, function() {
+				badPage();
+			});
+		}
+
+		function drawPage() {
+			checkFollowed();
+			ID("MineText").innerHTML = userInfo["uNick"]; //用户名
+			ID("HeadImg").src = _ServerLoc + userInfo["uHeadImgLoc"]; //头像
+
+			ID("Star").innerHTML = ((
+				userInfo["uStarCrt"] +
+				userInfo["uStarFln"] +
+				userInfo["uStarClr"]) / 3).toFixed(1); //星级
+			ID("StarCrt").innerHTML = userInfo["uStarCrt"].toFixed(1);
+			ID("StarFln").innerHTML = userInfo["uStarFln"].toFixed(1);
+			ID("StarClr").innerHTML = userInfo["uStarClr"].toFixed(1);
+
+			ID("FollowCnt").innerHTML = userInfo["uFollowCnt"];
+			ID("FansCnt").innerHTML = userInfo["uFansCnt"];
+			ID("AnsCnt").innerHTML = userInfo["uAnsCnt"];
+
+			var text = ID("IntroText");
+			text.innerHTML = userInfo["uCV"];
+			if (text.innerHTML.trim() == '')
+				text.innerHTML = "<font color=gray>这位用户暂时还没有填写个人简介哦~<\/font>";
+
+			if (userInfo['uNick'] === JSON.parse(plus.storage.getItem("userInfo"))['uNick'])
+				ID('EditIntro').style.display = "inline";
+		}
+
+		function checkFollowed() {
+			CallAJAX('checkFollowed', {
+				'userHash': userHash,
+				'followeeId': phoneNo,
+			}, function(data) {
+				if (data["res"] == "yes") {
+					ID("Follow").classList.add('followed');
+					ID("Follow").innerText = "已关注";
+				} else if (data["res"] == "2") {
+					ID("Follow").style.display = 'none';
+				} else {
+					ID("Follow").classList.remove('followed');
+					ID("Follow").innerText = "关注";
+				}
+				// 显示页面
+				DoShow(plus.webview.currentWebview(), "slide-in-right", 250);
+			});
+		}
+
+		function clickFollow() {
+			DoFollow(phoneNo, refreshPage);
+		}
+	</script>
+</html>

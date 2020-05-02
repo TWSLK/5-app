@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/ufun.css" rel="stylesheet" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/jump.js"></script>
+		<script src="js/tools.js"></script>
+		<style type="text/css">
+			
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<p id="Title">Title</p>
+		</header>
+	</body>
+
+	<script type="text/javascript">
+		var Current;
+		var IndexCnt = 0;
+		var UserHash;
+		
+		mui.init({
+			beforeback: function() {
+				//屏蔽 默认退出函数 并绑定到 退出整个应用的退出函数 上
+				//所有在主界面中嵌套的页面都需要填写此字段
+				MyBeforeBack();
+				return false;
+			},
+			pullRefresh: {
+				container: "#Pull", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+				down: {
+					style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+					color: '#BBBB00', //可选，默认“#2BD009” 下拉刷新控件颜色
+					callback: function() {
+						showList(0);
+						mui("#Pull").pullRefresh().endPulldown();
+					} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+				},
+				up: {
+					style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+					color: '#BBBB00', //可选，默认“#2BD009” 下拉刷新控件颜色
+					callback: function() {
+						showList(IndexCnt);
+						mui("#Pull").pullRefresh().endPulldown();
+					} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+				}
+			}
+		});
+		
+		mui.plusReady(function () {
+			Current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem("userHash");
+			DoShow(Current);
+		});
+		
+		function showList(index) {
+			index = index ? index : 0;
+			
+		}
+	</script>
+
+</html>

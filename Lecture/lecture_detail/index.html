@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/wjh_lec.css">
+		<link rel="stylesheet" href="../../Common/css/ufun.css">
+		<link rel="stylesheet" type="text/css" href="../../Common/css/table_list.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/table_list.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/rtxt_content.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="js/dhc_detail.js"></script>
+		<style type="text/css">
+			html {
+				background-color: #EEEEEE;
+			}
+			#MenuBackground {
+				display: none;
+				opacity: 0;
+				background-color: rgba(0, 0, 0, 0.5);
+				animation: menu_show;
+				animation-duration: 0.3s;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 50;
+			}
+
+			@keyframes menu_show {
+				0% {
+					opacity: 0;
+				}
+
+				100% {
+					opacity: 1;
+				}
+			}
+
+			#MenuBackground.show {
+				display: block;
+				opacity: 1;
+			}
+
+			#Menu {
+				position: absolute;
+				display: block;
+				top: unset;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 100vw;
+				max-height: fit-content;
+				background-color: white;
+				z-index: 51;
+				padding: 6vw;
+			}
+
+			.MenuBTN {
+				display: inline-block;
+				border-radius: 50%;
+				border: 1px solid black;
+				line-height: 7vw;
+				width: 8vw;
+				height: 8vw;
+				padding: 2vw;
+				margin: 0 2vw;
+			}
+
+			.MenuBTN i {
+				font-size: 8vw;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="Pull" style="display: none;"></div>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">讲座详情</div>
+			<div id="Right" class="BTN" onmouseup="showMenu();">
+				<i class="material-icons">menu</i>
+			</div>
+		</header>
+
+		<div id="MenuBackground" onclick="hideMenu();">
+			<div id="Menu">
+				<div class="MenuBTN" onclick="editLec();">
+					<i class="material-icons">mode_edit</i>
+				</div>
+				<div class="MenuBTN" onclick="deleteLec();">
+					<i class="material-icons">delete</i>
+				</div>
+			</div>
+		</div>
+
+		<!--撑起顶部导航栏区域-->
+		<div class="Content Fixed">
+			<div id="LecContent" class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<!--用户展示区-->
+					<section id="UserInfo">
+						<img class="User_head_img" id="HeadImg">
+						<div class="User_name" id="UserName">用户名</div>
+					</section>
+					<!--讲座展示区-->
+					<section id="LecCard">
+						<div id="LecTitleLine">
+							<p id="LecTitle"> </p>
+						</div>
+						<div id="LecTitleUnderline"></div>
+						<div id="Tags">
+							<div>山西大学</div>
+						</div>
+						<div id="LecText"></div>
+						<div id="LecFooter">
+							<p class="Gray_text" id="LecLooked">
+								0 浏览
+							</p>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+
+		<!--底部功能区-->
+		<footer id="FooterBox">
+			<div class="Theme_color_dark_bg" id="LikeBtn" style="width: 18vw;">
+				<img src="./img/like.png" class="Like_icon">
+				<div style="width: 12vw;">喜欢</div>
+			</div>
+			<!-- 收藏 -->
+			<!-- <div style="margin-left: auto;">
+					<img src="./img/save_norm.png" style="height: 8.3vw;">
+				</div> -->
+		</footer>
+		<script>
+			var userHash;
+			var current;
+			var phoneNo;
+			var lecId;
+			var theLec;
+			var isLectioner = false;
+			var InRefresh = false;
+
+			window.addEventListener("Refresh", RefreshPage);
+
+			function RefreshPage() {
+				setTimeout(function(thisWindow) {
+					thisWindow.location.reload();
+				}, 500, window);
+			}
+
+			mui.init();
+			mui.plusReady(function() {
+				GetStatusTop();
+				/*var statusbarHeight = 10;
+				try {
+					TAG('header')[0].style.height = TAG('header')[0].offsetHeight + statusbarHeight + 'px';
+					TAG('header')[0].style.paddingTop = statusbarHeight + 'px';
+					TAG('header')[0].style.opacity = '1';
+					CLASS('Content')[0].style.top = TAG('header')[0].offsetHeight + 'px';
+					CLASS('Content')[0].style.display = 'block';
+				} catch (error) {
+				
+				}
+				*/
+				
+				DoWait();
+				userHash = plus.storage.getItem("userHash");
+				current = plus.webview.currentWebview();
+				lecId = current.lecId;
+				fetchLection();
+				setTimeout(function() {
+					if (isWaiting) {
+						mui.alert("请检查网络连接!", "错误");
+						DontWait();
+						current.close();
+					}
+				}, 3000);
+			});
+
+			function drawEnd() {
+				//InitScroll(RefreshPage);
+				InitScroll();
+				InitRtxt(ID('LecText'));
+				CLASS('Content')[0].style.bottom = TAG('footer')[0].offsetHeight + 'px';
+				DoShow(plus.webview.currentWebview());
+			}
+
+			/**
+			 * 从服务器获取问题数据和状态
+			 * 根据问题状态填充页面并删减UI元素（主要是按钮）
+			 */
+			function fetchLection() {
+				DoWait();
+				// 获取问题数据以及状态
+				CallAJAX("getLec", {
+						"userHash": userHash,
+						"lecId": lecId
+					},
+					function(data) {
+						InRefresh = false;
+						if (data["res"] != "ok")
+							return;
+						theLec = data["lec"];
+						RefreshUserInfo(function(phoneNo1) {
+							phoneNo = phoneNo1
+							isLectioner = (phoneNo == data["lec"]["lecLecerId"]);
+							showLecCard(data["lec"]);
+							ID("LikeBtn").onclick = like;
+						});
+					});
+			}
+
+			/**
+			 * 根据返回的数据去填充问题描述的标题、标签、问题描述、悬赏金额、浏览数
+			 * @param {*} lec 服务器返回问题数据
+			 */
+			function showLecCard(lec) {
+				ID("LecTitle").innerText = lec["lecTitle"];
+				ID("HeadImg").src = _ServerLoc + lec["lecLecerHeadImgLoc"];
+				ID("UserName").innerText = lec["lecLecerNick"];
+				ID('UserInfo').addEventListener('click', function() {
+					JumpToUserIndex(lec["lecLecerId"], "../../");
+				});
+
+				ID("LecText").innerHTML = lec["lecText"];
+				ID("LecLooked").innerText = lec["lecLookedCnt"] + " 浏览";
+				ID("LecContent").style.opacity = 1;
+
+				ID("LikeBtn").onclick = like;
+				ID("FooterBox").style.opacity = 1;
+
+				drawEnd();
+			}
+
+			function like() {
+				CallAJAX("likeLec", {
+						userHash: userHash,
+						lecId: lecId,
+					},
+					function(data) {
+						if (data["res"] != "ok")
+							return;
+						ID('LikeBtn').classList.add('Btn_mute');
+						ID('LikeBtn').onclick = null;
+					});
+			}
+
+
+			function showMenu() {
+				if (!isLectioner) {
+					return;
+				}
+				ID('MenuBackground').classList.add("show");
+			}
+
+			function hideMenu() {
+				ID('MenuBackground').classList.remove("show");
+			}
+
+			function editLec() {
+				plus.webview.create(
+					'edit.html',
+					'LecEdit', {}, {
+						'lecId': lecId,
+						'lecTitle': ID('LecTitle').innerText,
+						'lecContent': ID('LecText').innerHTML,
+					}
+				);
+			}
+
+			function deleteLec() {
+				CallAJAX("changeLec", {
+					"userHash": userHash,
+					"lecId": lecId,
+					"action": "delete"
+				}, function(data) {
+					if (data["res"] == "ok") {
+						mui.toast('讲座删除成功');
+						mui.fire(current.opener(), 'Refresh');
+						ThisClose();
+					} else {
+						mui.alert('请检查网络设置', '删除失败');
+					}
+				}, function() {
+					mui.alert('请检查网络设置', '删除失败');
+				});
+			}
+		</script>
+	</body>
+</html>

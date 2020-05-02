@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style>
+			* {
+				margin: 0px;
+				padding: 0px;
+				text-decoration: none;
+				/* background-color: white!important; */
+			}
+
+			.Content {
+				width: 100%;
+			}
+
+			#LastLogContent {
+				padding: 3vw 4vw;
+			}
+
+			#LastLogUserInfo,
+			#Reply {
+				background-color: white;
+			}
+
+			#LastLogUserInfo {
+				height: 11vw;
+				display: block;
+			}
+
+			#LastLogUserHeadImg {
+				width: 10vw;
+				height: 10vw;
+				border-radius: 50%;
+				float: left;
+				border: 1px solid #AAAAAA;
+				margin-right: 2.2vw;
+			}
+
+			#LastLogUserNick {
+				font-size: 4vw;
+				line-height: 10.5vw;
+			}
+
+			#LastLogText {
+				font-size: 4vw;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				overflow: auto;
+			}
+
+			#Reply {
+				left: 0;
+				bottom: 0;
+				padding: 3vw 4vw;
+				position: absolute;
+				border: 0;
+				outline: none;
+				font-size: 4vw;
+				border-top: 1px solid #DDD;
+				width: 94vw;
+			}
+
+			/*
+			#LastLog {
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				background-color: white;
+			}*/
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">回复</div>
+			<div id="Right" class="BTN" onmouseup="Submit();">提交</div>
+		</header>
+		<div class="Content White">
+			<div id="LastLogContent">
+				<div id="LastLogUserInfo">
+					<img id="LastLogUserHeadImg" />
+					<div id="LastLogUserNick"></div>
+				</div>
+				<pre id="LastLogText"></pre>
+			</div>
+			<textarea id="Reply" placeholder="请输入回复内容"></textarea>
+		</div>
+		<script>
+			var current;
+			var userHash;
+			var quesId;
+			var lastLog;
+			var lastLogContent = ID("LastLogContent");
+			var lastLogUserHeadImg = ID("LastLogUserHeadImg");
+			var lastLogUserNick = ID("LastLogUserNick");
+			var lastLogText = ID("LastLogText");
+			var reply = ID("Reply");
+
+			mui.init();
+			mui.plusReady(function() {
+				GetStatusTop();
+				DoWait();
+				current = mui.currentWebview;
+				userHash = plus.storage.getItem("userHash");
+				quesId = current.quesId;
+				lastLog = current.lastLog;
+				lastLogUserHeadImg.src = _ServerLoc + lastLog["uHeadImgLoc"];
+				lastLogUserNick.textContent = lastLog["uNick"];
+				lastLogText.textContent = "" + lastLog["quesLogText"];
+				DoShow(current);
+				setInterval(heightResize, 200);
+			});
+
+			function heightResize() {
+				if (lastLogContent.offsetHeight >= screen.height / 2)
+					lastLogText.style.height = '50vh';
+				reply.style.height = "calc(100% - 6vw - " + TAG('header')[0].offsetHeight + 'px - ' + lastLogContent.offsetHeight +
+					"px)";
+			}
+
+			function Submit() {
+				if (reply.value.trim() == "") {
+					mui.alert("提交内容为空，请检查", "提示");
+					return;
+				} else if (reply.value.length >= 500) {
+					mui.alert("提交内容最多为500个字符，请检查", "提示");
+					return;
+				}
+				CallAJAX("changeQuesLog", {
+					"userHash": userHash,
+					"quesId": quesId,
+					"quesLogText": reply.value,
+					"action": "write"
+				}, function(data) {
+					switch (data["res"]) {
+						case "1":
+						case "2":
+							{
+								mui.alert("请检查您回答的题目是否有效", "提交失败");
+								break;
+							}
+						case "ok":
+							{
+								mui.fire(current.opener(), "Refresh");
+								current.close();
+							}
+						default:
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

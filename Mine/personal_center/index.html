@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/nav_bar.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<style>
+			html {
+				background-color: #EEEEEE;
+			}
+
+			body {
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+
+			header {
+				height: 48vw;
+			}
+
+			#HeaderContent {
+				position: absolute;
+				display: block;
+				height: 48vw;
+				width: 100vw;
+				bottom: 0;
+			}
+
+			#Open_set,
+			#Head_img,
+			#Userindex,
+			#Top_info,
+			.board {
+				position: absolute;
+			}
+			
+			#Head_img {
+				top: 10vw;
+				left: 5vw;
+				width: 20vw;
+				height: 20vw;
+				border-radius: 100vw;
+				border: 2px solid white;
+			}
+
+			#Top_info {
+				top: 14vw;
+				left: 30vw;
+				font-size: 5vw;
+			}
+			
+			#Open_set {
+				top: 8vw;
+				right: 8vw;
+				width: 6vw;
+			}
+			
+			#Userindex {
+				top: 23vw;
+				right: 6vw;
+				font-size: 4vw;
+			}
+
+			#Username {
+				font-weight: bold;
+			}
+
+			.board {
+				display: block;
+				opacity: 0;
+				margin-left: 5vw;
+				transition: opacity 500ms;
+				position: relative;
+				background: #FFFFFF;
+				color: #000000;
+				overflow: hidden;
+				border-radius: 3vw;
+				width: 90vw;
+				height: 16vh;
+				/* margin-left: 5vw; */
+				margin-top: 2vh;
+				box-shadow: 1px 1px 3px #484848;
+				z-index: 102;
+			}
+
+			.board.show {
+				opacity: 1 !important;
+			}
+
+			.board .line {
+				border-right: 1px solid #CCCCCC;
+			}
+
+			.board .title {
+				display: block;
+				position: absolute;
+				width: 82vw;
+				height: 3vh;
+				top: 1vh;
+				left: 4vw;
+				font-size: 2.2vh;
+				padding-bottom: 1vh;
+				border-bottom: 1px solid #CCCCCC;
+			}
+
+			.board .block {
+				font-size: 2vh;
+				text-align: center;
+				float: left;
+				margin-top: 7vh;
+			}
+
+			#Board1 {
+				margin-top: -5vh;
+				height: 10vh;
+			}
+
+			#Board1 .block {
+				width: calc(25% - 1px);
+				margin-top: 2vh;
+			}
+
+			#Board2 .block {
+				width: calc(33% - 1px);
+			}
+
+			#Board3 {
+				margin-bottom: 5vw;
+			}
+
+			#Board3 .block {
+				width: calc(50% - 1px);
+			}
+
+			#Board3 .block img {
+				height: 5vh;
+				margin-left: 6vw;
+				float: left;
+				width: 4.2vh;
+			}
+
+			#Board3 .block .board3-text {
+				margin-top: 1vh;
+				margin-right: 1vw;
+				float: right;
+				overflow: auto;
+				word-break: keep-all;
+				width: calc(100% - 4.2vh - 6vw - 1vw);
+			}
+
+			#Star {
+				color: yellow !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="Pull" style="display: none;"></div>
+
+		<header class="Black">
+			<div id="HeaderContent">
+				<img id="Head_img" onclick="JumpToImgView(_ServerLoc + UserInfo['uHeadImgLoc']);" />
+				<div id="Top_info" onclick="JumpToUserIndex(PhoneNo);">
+					<p id="Username">&nbsp;</p>
+					<p id="Star">&nbsp;</p>
+				</div>
+				<img id="Open_set" src="img/settings.png" onclick="JumpToSettings();" />
+				<div id="Userindex" onclick="JumpToUserIndex(PhoneNo);">个人主页&gt;</div>
+			</div>
+		</header>
+		<div class="Content" style="top: 48vw;">
+			<!-- 解答+提问+关注+收藏 -->
+			<div class="board" id="Board1">
+				<div class="block line" onclick="JumpToPersonalAnswer();">
+					<p class="board1-number">&nbsp;</p>
+					<p>解答</p>
+				</div>
+				<div class="block line" onclick="JumpToPersonalQuestion();">
+					<p class="board1-number">&nbsp;</p>
+					<p>提问</p>
+				</div>
+				<div class="block line" onclick="JumpToPersonalFollow();">
+					<p class="board1-number">&nbsp;</p>
+					<p>关注</p>
+				</div>
+				<div class="block" onclick="JumpToPersonalFans();">
+					<p class="board1-number">&nbsp;</p>
+					<p>粉丝</p>
+				</div>
+			</div>
+
+			<!-- 我的钱包 -->
+			<div class="board" id="Board2" onlick="JumpToWallet();">
+				<div class="title">
+					<p style="float: left; font-weight: bold;">我的钱包</p>
+					<p style="float: right; color: #C9C9C9;">查看钱包详情</p>
+				</div>
+				<div class="block line">
+					<p class="board2-number">&nbsp;</p>
+					<p>今日收益</p>
+				</div>
+				<div class="block line">
+					<p class="board2-number">&nbsp;</p>
+					<p>我的Ｕ币</p>
+				</div>
+				<div class="block">
+					<p class="board2-number">&nbsp;</p>
+					<p>我的积分</p>
+				</div>
+			</div>
+
+			<!--我的校园-->
+			<div class="board" id="Board3" onclick="JumpToSetEdu();">
+				<div class="title">
+					<p style="float: left; font-weight: bold;">我的校园</p>
+					<p style="float: right; color: #C9C9C9;">更新教育经历</p>
+				</div>
+				<div class="block line">
+					<img src="./img/location.png" />
+					<div class="board3-text">&nbsp;</div>
+				</div>
+				<div class="block">
+					<img src="./img/book.png" />
+					<div class="board3-text">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+		<div class="Footer"></div>
+	</body>
+
+	<script>
+		var PhoneNo; //手机号
+		var UserHash; //cookie值
+		var UserInfo; //用户信息
+
+		mui.init({
+			beforeback: function() {
+				//屏蔽 默认退出函数 并绑定到 退出整个应用的退出函数 上
+				//所有在主界面中嵌套的页面都需要填写此字段
+				MyBeforeBack();
+				return false;
+			},
+			pullRefresh: {
+				container: "#Pull", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+				down: {
+					style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+					color: '#BBBB00', //可选，默认“#2BD009” 下拉刷新控件颜色
+					callback: function() {
+						RefreshUserInfo(function(phoneNo) {
+							PhoneNo = phoneNo;
+							drawPage();
+						});
+						mui("#Pull").pullRefresh().endPulldown();
+					} //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+				}
+			}
+		});
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			drawPage(function() {
+				// 显示页面
+				DoShow(plus.webview.currentWebview());
+
+				var i = 1;
+				(function() {
+					ID('Board' + i++).classList.add('show');
+					if (i < 4)
+						setTimeout(arguments.callee, 200);
+				})();
+			});
+			RefreshUserInfo(function(phoneNo) {
+				PhoneNo = phoneNo;
+				drawPage();
+			});
+		});
+
+		window.addEventListener("refresh", function(e) {
+			RefreshUserInfo(function(phoneNo) {
+				PhoneNo = phoneNo;
+				drawPage();
+			});
+		});
+
+		// function drawPage(callback = function() {}) {
+			function drawPage(callback) {
+			UserInfo = plus.storage.getItem("userInfo");
+			if (!UserInfo)
+				return;
+			UserInfo = JSON.parse(UserInfo);
+			
+			ID("Username").innerHTML = UserInfo["uNick"]; //用户名
+			ID("Head_img").src = _ServerLoc + UserInfo["uHeadImgLoc"]; //头像
+			ID("Star").innerHTML = '★' + ((
+				UserInfo["uStarCrt"] +
+				UserInfo["uStarFln"] +
+				UserInfo["uStarClr"]) / 3).toFixed(1); //星级
+
+			var board1Numbers = CLASS("board1-number");
+			board1Numbers[0].innerHTML = UserInfo["uAnsCnt"]; //解答、提问、关注、粉丝
+			board1Numbers[1].innerHTML = UserInfo["uQuesCnt"];
+			board1Numbers[2].innerHTML = UserInfo["uFollowCnt"];
+			board1Numbers[3].innerHTML = UserInfo["uFansCnt"];
+
+			var board2Numbers = CLASS("board2-number");
+			board2Numbers[0].innerHTML = UserInfo["uGainToday"].toFixed(2); //今日收益、我的U币、我的积分
+			board2Numbers[1].innerHTML = UserInfo["uUB"].toFixed(2);
+			board2Numbers[2].innerHTML = UserInfo["uScore"].toFixed(0);
+
+			var board3Text = CLASS("board3-text");
+			board3Text[0].innerHTML = UserInfo["uEduSchoolName"];
+			board3Text[1].innerHTML = UserInfo["uEduDeptName"];
+			// callback();
+		}
+	</script>
+</html>

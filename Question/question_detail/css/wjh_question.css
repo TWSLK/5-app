@@ -1,0 +1,275 @@
+* {
+	/* table elements 表格元素 */
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	/* 720px宽度下等同于24px */
+	font-size: 3.5vw;
+	/* font-family: 'Noto Sans SC', sans-serif; */
+	background-color: rgb(238, 238, 238);
+	overflow: hidden;
+}
+
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	background-color: white;
+}
+
+.Theme_color_dark_bg {
+	background-color: #4B4A48;
+}
+
+.Theme_color_bg {
+	background-color: #FDD100;
+}
+
+.Theme_color {
+	color: #FDD100;
+}
+
+.Gray_text {
+	color: #BFBFBF
+}
+
+.Gray_bg {
+	background-color: #BFBFBF
+}
+
+.Btn {
+	height: 8.5vw;
+	width: 33.3vw;
+	margin-left: 4vw;
+	color: white;
+	border-radius: 3.4vw;
+	display: none;
+	justify-content: center;
+	align-items: center;
+}
+
+.Btn img {
+	height: 4vw;
+	margin-right: 3.3vw;
+}
+
+.Btn span,
+#LikeBtn div {
+	font-size: 3.8vw;
+	text-shadow: 0 0 1px sandybrown;
+}
+
+.Btn span {
+	font-weight: bold;
+}
+
+.Btn_mute {
+	background-color: #E4E4E4;
+}
+
+.User_head_img {
+	height: 10vw;
+	width: 10vw;
+	float: left;
+	border-radius: 50%;
+	border: 1px solid #AAAAAA;
+	margin-right: 2.2vw;
+}
+
+.User_name {
+	float: left;
+	margin-right: 2vw;
+	font-size: 4vw;
+	font-weight: 300;
+}
+
+.Assign_Btn {
+	height: 5.6vw;
+	width: 13.33vw;
+	margin: 2.3vw 3.3vw 2.3vw 0;
+	float: right;
+	text-align: center;
+	font-size: 3.5vw;
+	font-weight: bolder;
+	border: none;
+	border-radius: 1.5vw;
+}
+
+.Ans_card {
+	padding: 3.3vw 4.44vw;
+	border-bottom: 1px solid white;
+	background-color: white;
+	border-bottom: 2px solid #F0F0F0;
+}
+
+.Ans_card .Anser_info {
+	height: 10vw;
+	display: flex;
+	align-items: center;
+	margin-bottom: 3.3vw;
+}
+
+.Appl_card {
+	display: block;
+	margin: 3vw;
+	padding: 3vw;
+	border-radius: 2vw;
+	font-weight: 300;
+	height: 10.5vw;
+	background-color: white;
+	border-bottom: 2px solid #F0F0F0;
+}
+
+#NavBar,
+#QuesCard,
+#UserInfo {
+	padding: 0 4.4vw;
+}
+
+#UserInfo {
+	height: 14vw;
+	display: flex;
+	align-items: center;
+	padding: 1.5vw 4.4vw 0.5vw 4.4vw;
+	/* border-bottom: 1px solid rgb(246, 246, 246); */
+	background-color: white;
+	border-bottom: 1px solid #EEE;
+}
+
+#QuesCard {
+	background-color: white;
+	border: 1px solid white;
+}
+
+#QuesCard #QuesTitleLine {
+	margin-top: 2.6vw;
+}
+
+#QuesCard #QuesTitleLine #QuesTitle {
+	display: inline;
+	font-weight: bold;
+	font-size: 1.5rem;
+	height: 1rem;
+}
+
+#QuesCard #QuesTitleLine .right {
+	float: right;
+	text-align: center;
+	margin-top: 1.5vw;
+}
+
+#QuesCard #QuesTitleLine .right #Reward {
+	height: 5.6vw;
+	width: 14vw;
+	border-radius: 1.5vw;
+	float: right;
+	margin-left: 1.7vw;
+	font-weight: 600;
+	font-size: 4vw;
+	line-height: 6vw;
+	color: white;
+	background-color: rgb(253, 209, 0);
+	text-shadow: 0 0 1px sandybrown;
+}
+
+#QuesCard #QuesTitleUnderline {
+	height: 1vw;
+	width: 27.7vw;
+	border-radius: 0.5vw;
+	background-color: rgb(253, 209, 0);
+}
+
+#QuesCard #Tags {
+	margin: 2.8vw auto;
+	display: flex;
+}
+
+#QuesCard #Tags div {
+	margin-right: 3.3vw;
+	height: 4.5vw;
+	padding: 0 1.5vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.8rem;
+	border: 0.25vw solid black;
+	border-radius: 1.5vw;
+}
+
+#QuesCard #QuesFooter {
+	margin: 3.2vw 0;
+}
+
+#QuesCard #QuesFooter #QuesLooked {
+	text-align: right;
+	font-size: 3vw;
+}
+
+#QuesStatus {
+	background-color: rgb(238, 238, 238);
+	padding: 3.3vw 4.44vw;
+}
+
+#QuesText {
+	font-size: 4vw;
+	margin-bottom: 3.3vw;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+}
+
+#StatusLine {
+	height: 6.6vw;
+	text-align: center;
+	font-size: 1.25rem;
+	color: white;
+	border-radius: 1.5vw;
+}
+
+#HiddenSection {
+	display: none;
+}
+
+#QuesContent {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 12vw;
+	bottom: 15vw;
+	opacity: 0;
+	transition: opacity 300ms;
+	overflow: hidden;
+}
+
+#FooterBox {
+	border-top: 1px solid rgb(246, 246, 246);
+	box-shadow: 0 0 2px #DDDDDD;
+	padding: 3vw 4vw 3vw 4vw;
+	display: flex;
+	background-color: white;
+	opacity: 0;
+	transition: opacity 300ms;
+}
+
+#LikeBtn {
+	height: 8.5vw;
+	width: 25vw;
+	color: white;
+	border-radius: 3.4vw;
+	display: none;
+	align-items: center;
+}
+
+#LikeBtn .Like_icon {
+	height: 2.5vw;
+	width: 2.5vw;
+	margin: 0 2.5vw;
+}
+
+#LikeBtn div {
+	height: 8.5vw;
+	display: flex;
+	align-items: center;
+	margin-right: 0.2vw;
+}

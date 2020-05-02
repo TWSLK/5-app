@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Ufun</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../Common/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../Common/css/ufun.css" />
+		<script src="../Common/js/mui.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<script src="../Common/js/status_bar.js"></script>
+		<script src="../Common/js/jump.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<!-- <script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script> -->
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<!-- <script src="../../Common/js/lib/materialize.min.js"></script> -->
+		<style>
+			html {
+				background-color: #EEEEEE;
+			}
+			#NavBar {
+				position: fixed;
+				bottom: 0px;
+				height: 60px;
+				width: 100%;
+				padding: 0;
+				border-top: 1px solid #CCC;
+				background-color: white;
+				z-index: 99;
+			}
+			.tab-item {
+				display: block;
+				float: left;
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				width: 20%;
+				text-align: center;
+				background-color: white;
+				background-repeat: no-repeat;
+				background-position: center center;
+				background-size: contain;
+				transition: background-image 100ms;
+			}
+			#Question {
+				background-image: url('img/question_0.png');
+			}
+			#Question.active-item {
+				background-image: url('img/question_1.png');
+			}
+			#Lecture {
+				background-image: url('img/lecture_0.png');
+			}
+			#Lecture.active-item {
+				background-image: url('img/lecture_1.png');
+			}
+			#Plus {
+				background-image: url('img/plus.png');
+			}
+			#Message {
+				background-image: url('img/message_0.png');
+			}
+			#Message.active-item {
+				background-image: url('img/message_1.png');
+			}
+			#Mine {
+				background-image: url('img/mine_0.png');
+			}
+			#Mine.active-item {
+				background-image: url('img/mine_1.png');
+			}
+			#NewMsgRed {
+				display: none;
+				position: absolute;
+				border-radius: 100%;
+				background-color: red;
+				width: 3vw;
+				height: 3vw;
+				right: 25vw;
+				top: 2vw;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<!-- 背景铺垫 -->
+		</header>
+		<div class="mui-content">
+			<!-- (nav) 导航栏
+					此处使用了可扩展性很强的设计，
+					只要保证下方的a标签id、subPages、buttonImgs三者一一对应，
+					则导航栏可以随意进行扩展。
+			-->
+			<nav id="NavBar">
+				<div class="tab-item" id="Question"></div>
+				<div class="tab-item" id="Lecture"></div>
+				<div class="tab-item" id="Plus"></div>
+				<div class="tab-item" id="Message">
+					<div id="NewMsgRed"></div>
+				</div>
+				<div class="tab-item" id="Mine"></div>
+			</nav>
+			<!-- (nav) 导航栏结束 -->
+		</div>
+	</body>
+	<script type="text/javascript">
+		var userHash;
+		//页面列表
+		var subPages = {
+			'Question': '../Question/question_list.html',
+			'Lecture': '../Lecture/lecture_list.html',
+			'Plus': 'pop_window.html',
+			'Message': '../Message/message_list.html',
+			'Mine': '../Mine/personal_center/index.html'
+		};
+		//默认页面
+		var defaultPage = 'Mine';
+		//选项卡按钮不同状态下的图片
+		var buttonImgs = {
+			'Question': ['img/question_0.png', 'img/question_1.png'],
+			'Lecture': ['img/lecture_0.png', 'img/lecture_1.png'],
+			'Plus': ['img/plus.png', 'img/plus.png'],
+			'Message': ['img/message_0.png', 'img/message_1.png'],
+			'Mine': ['img/mine_0.png', 'img/mine_1.png']
+		};
+
+		mui.init();
+		mui.plusReady(function() {
+			GetStatusTop();
+			setInterval(StatusBar, 200, true);
+			userHash = plus.storage.getItem("userHash");
+			//动态渲染选项卡按键
+			var items = document.getElementsByClassName("tab-item");
+			for (var i = 0; i < items.length; ++i) {
+				(function (k){
+					items[k].classList.add('waves-effect');
+					// console.log(items[i]["id"]);
+					items[k].onclick = function(e) {
+						console.log(items[k])
+						ClickButton(items[k]);
+					};
+				}(i))
+			}
+			// 默认页面
+			NewSubPage(ID(defaultPage));
+			// 启动新消息轮询
+			GetNewMsg();
+		});
+
+		//-------------------------------
+		//  选项卡、subPages相关
+		//-------------------------------
+		function ClickButton(now) {
+			var last = document.getElementsByClassName("active-item")[0];
+			CloseWindow();
+			console.log(now)
+			// 无效点击
+			if (now == last) {
+				return;
+			}
+			// 特殊按键点击
+			if (now.id == 'Plus') {
+				OpenWindow();
+				return;
+			}
+			// 更新子页面
+			OldSubPage(last);
+			NewSubPage(now);
+		}
+		function OldSubPage(last) {
+			// 样式更新
+			last.classList.remove('active-item');
+			//last.getElementsByTagName("img")[0].src = buttonImgs[last.id][0];
+			// 关闭页面
+			plus.webview.getWebviewById(last.id).close();
+		}
+		function NewSubPage(now) {
+			// 样式更新
+			now.classList.add('active-item');
+			//now.getElementsByTagName("img")[0].src = buttonImgs[now.id][1];
+			// 打开页面
+			plus.webview.create(
+				subPages[now.id],
+				now.id, {
+					top: '0px',
+					bottom: '60px',
+					background: 'transparent'
+				}
+			).show('fade-in', 200);
+		}
+
+		//-------------------------------
+		//  PopWindow相关
+		//-------------------------------
+		window.addEventListener("ClosePopWindow", function(e) {
+			CloseWindow();
+		});
+		window.addEventListener('JumpToAsk', function(e) {
+			if (plus.webview.getWebviewById('QuesAsk') != null)
+				plus.webview.getWebviewById('QuesAsk').close();
+			JumpToQuesAsk();
+		});
+		window.addEventListener('JumpToLec', function(e) {
+			if (plus.webview.getWebviewById('NewLec') != null)
+				plus.webview.getWebviewById('NewLec').close();
+			JumpToNewLec();
+		});
+		function OpenWindow() {
+			if (plus.webview.getWebviewById('PopWindow') != null)
+				return;
+			plus.webview.open(
+				subPages['Plus'],
+				'PopWindow', {
+					top: '0px',
+					bottom: '60px',
+					background: 'transparent'
+				},
+				'none',
+				0
+			);
+		}
+		function CloseWindow() {
+			if (plus.webview.getWebviewById('PopWindow') != null) {
+				plus.webview.getWebviewById('PopWindow').close();
+				return;
+			}
+		}
+
+		//-------------------------------
+		//  检测新消息（小红点）
+		//-------------------------------
+		function GetNewMsg() {
+			(function() {
+				CallAJAX("ask4NewMsg", {
+					"userHash": userHash
+				}, function(data) {
+					if (data["res"] != "ok")
+						return;
+					if (data["num"] == 0) {
+						document.getElementById("NewMsgRed").style.display = "none";
+					} else {
+						document.getElementById("NewMsgRed").style.display = "block";
+					}
+				}, function() {
+					// Do Nothing When Failed.
+				});
+				setTimeout(arguments.callee, 5000);
+			})();
+		}
+	</script>
+</html>

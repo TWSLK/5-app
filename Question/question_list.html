@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/jump.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<script src="../Common/js/table_list.js"></script>
+		<script src="../Common/js/nav_bar.js"></script>
+		<script type="text/javascript" src="../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../Common/css/lib/materialize.min.css">
+		<script src="../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			.Card {
+				padding-top: 4vw;
+				padding-left: 4vw;
+				padding-right: 4vw;
+			}
+
+			.Ques_title {
+				font-weight: bold;
+				font-size: 4.8vw;
+				width: 100%;
+				margin-bottom: 2vw;
+			}
+
+			.Ques_Queser {}
+
+			.Ques_head_img {
+				float: left;
+				opacity: 0;
+				height: 8vw;
+				width: 8vw;
+				border-radius: 100%;
+				border: 1px solid #999999;
+			}
+
+			@keyframes Head_img_make_done {
+				0% {
+					opacity: 0;
+				}
+
+				100% {
+					opacity: 1;
+				}
+			}
+
+			.Done .Ques_head_img {
+				opacity: 1;
+				animation: Head_img_make_done;
+				animation-duration: 1s;
+			}
+
+			.Ques_nick {
+				float: left;
+				margin-left: 2vw;
+				font-size: 4vw;
+				height: 8vw;
+				line-height: 8vw;
+			}
+
+			.Ques_text {
+				float: left;
+				width: 100%;
+				font-size: 4vw;
+				color: #888888;
+				word-wrap: break-word;
+				margin-top: 2vw;
+			}
+
+			#QuesList,
+			#BadPage {
+				display: none;
+			}
+
+			.Ques_footer {
+				margin-bottom: 4vw;
+			}
+
+			.Float {
+				float: left;
+				padding-right: 1vw;
+				line-height: 7vw;
+				font-size: 3.3vw;
+				color: #CCC;
+			}
+
+			.Reward {
+				float: right;
+				width: 14vw;
+				color: #484848;
+				text-align: center;
+				font-weight: 300;
+				font-size: 4vw;
+				border-radius: 1.5vw;
+				background-color: #FDD100;
+			}
+			
+			.Reward.None {
+				background-color: #666;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="temp" id="QuesTemplate">
+			<li class="mui-table-view-cell Card waves-effect" quesId="0">
+				<div class="Ques_title">题目</div>
+				<div class="Ques_content">
+					<div class="Ques_Queser">
+						<img class="Ques_head_img" />
+						<div class="Ques_nick">用户名</div>
+					</div>
+					<div class="Ques_text">问题描述</div>
+				</div>
+				<div class="Ques_footer">
+					<div class="Float Data">233</div>
+					<div class="Float">浏览 ·</div>
+					<div class="Float Data">332</div>
+					<div class="Float">推荐</div>
+					<div class="Reward">
+						100
+					</div>
+					<div class="Float" style="float: right;">悬赏</div>
+				</div>
+			</li>
+		</div>
+		<header>
+			<p id="Title">发现</p>
+			<div id="Right" class="BTN" onmouseup="showList(0);">
+				<i class="material-icons">refresh</i>
+			</div>
+		</header>
+		<div class="Content Fixed">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" id="QuesList">
+					</ul>
+				</div>
+			</div>
+			<div id="BadPage" style="text-align: center; color: gray;">
+				<h5>网络错误</h5>
+				<h5>请检查网络连接后重新加载</h5>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var UserHash;
+		var Current;
+		var LastQuesId = 0;
+		var QuesIsEnd = false;
+		var QuesList = document.getElementById("QuesList");
+
+		mui.init({
+			beforeback: function() {
+				//屏蔽 默认退出函数 并绑定到 退出整个应用的退出函数 上
+				//所有在主界面中嵌套的页面都需要填写此字段
+				MyBeforeBack();
+				return false;
+			}
+		});
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll(function() {
+				if (!InRefresh)
+					showList(0);
+			}, function() {
+				if (!InRefresh && !QuesIsEnd)
+					showList(LastQuesId);
+			});
+			Current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem("userHash");
+			DoShow(Current);
+			showList();
+		});
+
+		function showList(id) {
+			InRefresh = true;
+			id = id ? id : 0;
+			if (id == 0) {
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 0);
+			}
+			DoWait();
+			// AJAX: listQues
+			CallAJAX('listQues', JSON.stringify({
+				"userHash": UserHash,
+				"lastQuesId": id,
+				"listType": "campus"
+			}), function(data) { // success
+				DontWait();
+				InRefresh = false;
+				BadPage.style.display = "none";
+				console.log(data);
+
+				if (id == 0) {
+					QuesList.innerHTML = "";
+					LastQuesId = 0;
+				}
+
+				if (data["res"] != "ok") {
+					console.log("question load done.");
+					QuesIsEnd = true;
+					return;
+				}
+				QuesIsEnd = false;
+
+				var QuesCnt = QuesList.children.length;
+				for (var i in data["quesList"]) {
+					(function(k){
+						setTimeout(function() {
+							addQuesCard(data["quesList"][k], QuesCnt);
+						}, 50 * i);
+					}(i))			
+				}
+			}, function() { // error
+				DontWait();
+				InRefresh = false;
+				QuesIsEnd = true;
+				QuesList.style.display = "none";
+				BadPage.style.display = "block";
+				console.log("question load failed.");
+			});
+		}
+
+		function addQuesCard(ques, cnt) {
+			if (LastQuesId != 0 && ques["quesId"] >= LastQuesId)
+				return;
+			var newQues = document.getElementById("QuesTemplate").lastElementChild.cloneNode(true);
+
+			newQues.setAttribute("quesid", ques["quesId"].toString());
+			newQues.setAttribute("userid", ques["quesQueserId"].toString());
+			newQues.onclick = function() {
+				JumpToQues(parseInt(newQues.getAttribute("quesid")));
+			}
+			newQues.getElementsByClassName("Ques_head_img")[0].src = _ServerLoc + ques["quesQueserHeadImgLoc"];
+			newQues.getElementsByClassName("Ques_nick")[0].innerText = ques["quesQueserNick"];
+			newQues.getElementsByClassName("Ques_title")[0].innerText = ques["quesTitle"];
+			newQues.getElementsByClassName("Ques_text")[0].innerText = ques["quesPreview"];
+			newQues.getElementsByClassName("Data")[0].innerText = ques["quesLookedCnt"];
+			newQues.getElementsByClassName("Data")[1].innerText = ques["quesLikedCnt"];
+			if (ques["quesReward"] != 0) {
+				newQues.getElementsByClassName("Reward")[0].innerText = ques["quesReward"];
+			} else {
+				newQues.getElementsByClassName("Reward")[0].innerText = "无";
+				newQues.getElementsByClassName("Reward")[0].classList.add('None');
+			}
+			QuesList.appendChild(newQues);
+			newQues.classList.add("Done");
+
+			LastQuesId = ques["quesId"];
+			QuesList.style.display = "block";
+		}
+	</script>
+
+</html>
+
+<!--
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/jump.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<script src="../Common/js/table_list.js"></script>
+		<script src="../Common/js/nav_bar.js"></script>
+		<script type="text/javascript" src="../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../Common/css/lib/materialize.min.css">
+		<script src="../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		
+	</head>
+	<body>
+		<header>
+			<div id="Title">DEBUG</div>
+		</header>
+		<div class="Content">
+			
+		</div>
+		<script type="text/javascript">
+			var content = CLASS('Content')[0];
+			
+			content.innerHTML += 'innerheight: ' + window.innerHeight + '<br>';
+			content.innerHTML += 'outerheight: ' + window.outerHeight + '<br>';
+			content.innerHTML += 'screenheight: ' + screen.height + '<br>';
+			content.innerHTML += 'screenavailheight: ' + screen.availHeight + '<br>';
+			content.innerHTML += 'taskbarheight: ' + (screen.height - screen.availHeight) + '<br>';
+			content.innerHTML += 'htmlclientheight: ' + TAG('html')[0].clientHeight + '<br>';
+			content.innerHTML += 'htmloffsetheight: ' + TAG('html')[0].offsetHeight + '<br>';
+			content.innerHTML += 'htmlclienttop: ' + TAG('html')[0].clientTop + '<br>';
+			content.innerHTML += 'htmloffsettop: ' + TAG('html')[0].offsetTop + '<br>';
+		</script>
+	</body>
+</html>-->

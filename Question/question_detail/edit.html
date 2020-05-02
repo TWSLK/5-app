@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- 问题编辑页 -->
+<!-- @author DHC -->
+<!-- 2020/04/25 -->
+<html style="background: white;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.js"></script>
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/lang/summernote-zh-CN.min.js"></script>
+		<script src="../../Common/js/summernote-fix.js"></script>
+		<link rel="stylesheet" href="../../Common/css/ufun.css" />
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<link rel="stylesheet" href="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.css" />
+		<link rel="stylesheet" href="../../Common/css/summernote-fix.css"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<style>
+			#QuesTitle {
+					font-size: 6vw;
+					height: 7vw;
+					width: 90vw;
+					padding: 1vw 5vw;
+					font-weight: bold;
+					background-color: transparent;
+					border: 0;
+					outline: none;
+					box-shadow: none;
+				}
+				
+				#QuesTitle::-webkit-input-placeholder {
+					color: var(--color-gray-medium);
+					font-weight: bold;
+				}
+			</style>
+	</head>
+
+	<body>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">编辑问题</div>
+			<div id="Right" class="BTN" onmouseup="updateQues();">发布</div>
+		</header>
+		<div class="content">
+			<form>
+				<input type="text" id="QuesTitle" placeholder="输入问题标题" />
+				<textarea rows="30" type="text" placeholder="输入问题内容" id="QuesContent"></textarea>
+			</form>
+		</div>
+	</body>
+	<script>
+		var userHash;
+		var current;
+		var quesId;
+		var quesReward;
+		var title = $('#QuesTitle')[0];
+		var content = $('#QuesContent');
+
+		document.addEventListener('plusready', function() {
+			GetStatusTop();
+			SummerNoteInit(content, '输入问题内容');
+			userHash = plus.storage.getItem('userHash');
+			current = plus.webview.currentWebview();
+			quesId = current.quesId;
+			quesReward = current.quesReward;
+			title.value = current.quesTitle;
+			//Content.value = current.quesContent;
+			current.show("slide-in-bottom", 300);
+		});
+		SummerNoteInit(content, '输入问题内容');
+
+		function updateQues() {
+			if (!CheckLength("问题标题", title.value, 100, 5))
+				return;
+			if (!CheckLength("问题内容", content.summernote('code'), 1024, 30))
+				return;
+			CallAJAX("changeQues", {
+				"userHash": userHash,
+				"quesId": quesId,
+				"quesTitle": title.value,
+				"quesText": content.summernote('code'),
+				"quesReward": quesReward,
+				"action": "update"
+			}, function(data) {
+				if (data["res"] == "ok") {
+					plus.nativeUI.toast('问题编辑成功');
+					current.opener().evalJS('RefreshPage();');
+					ThisClose();
+				} else {
+					plus.nativeUI.alert('请检查网络设置', '提交失败');
+				}
+			}, function() {
+				plus.nativeUI.alert('请检查网络设置', '提交失败');
+			});
+		}
+	</script>
+</html>

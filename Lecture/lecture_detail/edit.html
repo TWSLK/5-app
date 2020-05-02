@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="background: white;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style>
+			a {
+				display: block;
+			}
+			
+			#LecTitle {
+				font-size: 5vw;
+				height: 7vw;
+				width: 90vw;
+				padding: 1vw 5vw;
+				top: 15vw;
+				font-weight: bold;
+			}
+			
+			#LecContent {
+				font-size: 4.5vw;
+				width: 90vw;
+				top: 27vw;
+				bottom: 0;
+				padding: 1vw 5vw;
+				border-top: 1px solid #888888;
+				resize: none;
+			}
+			
+			#LecTitle, #LecContent {
+				position: absolute;
+				background-color: transparent;
+				border: 0;
+				outline: none;
+			}
+			
+			#LecTitle::-webkit-input-placeholder {
+				color: #bfbfbf;
+				font-weight: bold;
+			}
+			
+			#LecContent::-webkit-input-placeholder {
+				color: #e4e4e4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">编辑讲座</div>
+			<div id="Right" class="BTN" onmouseup="updateLec();">发布</div>
+		</header>
+		<input type="text" id="LecTitle" placeholder="输入讲座标题" />
+		<textarea rows="30" type="text" id="LecContent" placeholder="输入讲座内容"></textarea>
+	</body>
+	<script>
+		var UserHash;
+		var current;
+		var lecId;
+		var Title = ID('LecTitle');
+		var Content = ID('LecContent');
+
+		mui.init();
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem('userHash');
+			lecId = current.lecId;
+			Title.value = current.lecTitle;
+			Content.value = current.lecContent;
+			lecReward = current.lecReward;
+			current.show("slide-in-bottom", 300);
+		});
+
+		function updateLec() {
+			if (!CheckLength("讲座标题", Title.value, 100, 5))
+				return;
+			if (!CheckLength("讲座内容", Content.value, 1024, 5))
+				return;
+			CallAJAX("changeLec", {
+				"userHash": UserHash,
+				"lecId": lecId,
+				"lecTitle": Title.value,
+				"lecText": Content.value,
+				"action": "update"
+			}, function(data) {
+				if (data["res"] == "ok") {
+					mui.toast('讲座编辑成功');
+					mui.fire(current.opener(), 'Refresh');
+					ThisClose();
+				} else {
+					mui.alert('请检查网络设置', '提交失败');
+				}
+			}, function() {
+				mui.alert('请检查网络设置', '提交失败');
+			});
+		}
+	</script>
+</html>

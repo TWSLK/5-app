@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/table_list.js"></script>
+		<script src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<link href="../../Common/css/lib/materialize.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			.Card {
+				padding: 0;
+				height: 15vw;
+			}
+
+			.Question_title {
+				font-size: 5vw;
+				top: 0;
+				right: 5vw;
+				width: calc(100% - 22.5vw);
+				padding-left: 3vw;
+				margin: 0;
+				line-height: 15vw;
+				display: block;
+				position: absolute;
+				overflow: hidden;
+				word-break: keep-all;
+				font-weight: bold;
+			}
+
+			.Question_head_img {
+				display: block;
+				position: absolute;
+				opacity: 0;
+				top: 2.5vw;
+				left: 7.5vw;
+				height: 10vw;
+				width: 10vw;
+				margin: 0;
+				border-radius: 100%;
+				border: 1px solid #999999;
+			}
+
+			@keyframes Head_img_make_done {
+				0% {
+					opacity: 0;
+				}
+
+				100% {
+					opacity: 1;
+				}
+			}
+
+			.Done .Question_head_img {
+				opacity: 1;
+				animation: Head_img_make_done;
+				animation-duration: 1s;
+			}
+
+			#QuestionList,
+			#BadPage {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 消息卡片模板 -->
+		<div class="temp" id="QuestionTemplate">
+			<li class="mui-table-view-cell Card waves-effect" quesId="0">
+				<img class="Question_head_img" />
+				<div class="Question_title">问题标题</div>
+			</li>
+		</div>
+		<!-- 顶栏 -->
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<p id="Title">我的提问</p>
+		</header>
+		<!-- 消息列表 -->
+		<div class="Content Fixed">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" id="QuestionList">
+					</ul>
+				</div>
+			</div>
+			<div id="BadPage" style="text-align: center; color: gray;">
+				<h5>网络错误</h5>
+				<h5>请检查网络连接后重新加载</h5>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var UserHash;
+		var Current;
+		var QuestionList = document.getElementById("QuestionList");
+
+		mui.init();
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll();
+			Current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem("userHash");
+			DoShow(Current);
+			showList();
+		});
+
+		function showList() {
+			DoWait();
+			CallAJAX('listQuestion', {
+				'userHash': UserHash
+			}, function(data) { // success
+				DontWait();
+				BadPage.style.display = "none";
+
+				for (let i in data["questionsList"]) {
+					setTimeout(function() {
+						addQuestionCard(data["questionsList"][i], 0);
+					}, 50 * i);
+				}
+			}, function() { // error
+				DontWait();
+				QuestionList.style.display = "none";
+				BadPage.style.display = "block";
+			});
+		}
+
+		function addQuestionCard(question) {
+			var newQuestion = document.getElementById("QuestionTemplate").lastElementChild.cloneNode(true);
+
+			newQuestion.setAttribute("quesid", question["quesId"].toString());
+			newQuestion.onclick = function() {
+				JumpToQues(parseInt(newQuestion.getAttribute("quesid")), '../../');
+			}
+			newQuestion.getElementsByClassName("Question_title")[0].innerText = question["quesTitle"];
+			newQuestion.getElementsByClassName("Question_head_img")[0].src = _ServerLoc + question["quesQueserHeadImgLoc"];
+			QuestionList.appendChild(newQuestion);
+			newQuestion.classList.add("Done");
+
+			QuestionList.style.display = "block";
+		}
+	</script>
+
+</html>

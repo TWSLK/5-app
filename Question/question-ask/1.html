@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- 提问页 -->
+<!-- @author DHC -->
+<!-- 2020/04/25 -->
+<html style="background: white;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.js"></script>
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/lang/summernote-zh-CN.min.js"></script>
+		<script src="../../Common/js/summernote-fix.js"></script>
+		<link rel="stylesheet" href="../../Common/css/ufun.css" />
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<link rel="stylesheet" href="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.css" />
+		<link rel="stylesheet" href="../../Common/css/summernote-fix.css"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<style>
+			.reward-btn {
+				display: inline-block;
+				margin: 4vw 0 4vw 4vw;
+				padding: 1vw 0;
+				text-align: center;
+				font-size: 4vw;
+				width: 20vw;
+				color: var(--color-black);
+				background-color: var(--color-white);
+				border: 1px solid var(--color-black);
+				border-radius: 2vw;
+			}
+			
+			.reward-btn.active {
+				color: var(--color-yellow);
+				border: 1px solid var(--color-yellow);
+			}
+			
+			#QuesTitle {
+				font-size: 6vw;
+				height: 7vw;
+				width: 90vw;
+				padding: 1vw 5vw;
+				font-weight: bold;
+				background-color: transparent;
+				border: 0;
+				outline: none;
+				box-shadow: none;
+			}
+			
+			#QuesTitle::-webkit-input-placeholder {
+				color: var(--color-gray-medium);
+				font-weight: bold;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">提问</div>
+			<div id="Right" class="BTN" onmouseup="nextPage();">发布</div>
+		</header>
+		<div class="content">
+			<div>
+				<div onclick="rewarding(true);" class="reward-btn active" id="BTN0">悬赏</div>
+				<div onclick="rewarding(false);" class="reward-btn" id="BTN1">无悬赏</div>
+			</div>
+			<form>
+				<input type="text" id="QuesTitle" placeholder="输入问题标题" />
+				<textarea rows="30" type="text" placeholder="输入问题内容" id="QuesContent"></textarea>
+			</form>
+		</div>
+	</body>
+	<script>
+		var current;
+		var title = $('#QuesTitle')[0];
+		var content = $('#QuesContent');
+		var btn0 = $("#BTN0")[0];
+		var btn1 = $("#BTN1")[0];
+		var haveReward = true;
+		
+		document.addEventListener('plusready', function() {
+			GetStatusTop();
+			SummerNoteInit(content, '输入问题内容');
+			current = plus.webview.currentWebview();
+			current.show("slide-in-bottom", 300);
+		});
+		
+		function nextPage() {
+			if (!CheckLength("问题标题", title.value, 100, 5))
+				return;
+			if (!CheckLength("问题内容", content.summernote('code'), 1024, 30))
+				return;
+			plus.webview.create('2.html', 'QuesAsk_2', {}, {
+					"title": title.value,
+					"content": content.summernote('code'),
+					"haveReward": haveReward
+			}).show();
+		}
+
+		function rewarding(flag) {
+			if (flag) {
+				btn0.classList.add('active');
+				btn1.classList.remove('active');
+			} else {
+				btn1.classList.add('active');
+				btn0.classList.remove('active');
+			}
+			haveReward = flag;
+		}
+	</script>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../Common/css/ufun.css">
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/tools.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style>
+			body{
+				display: block;
+			}
+			html, .Content{
+				background-color: white;
+			}
+			
+			.option{
+				display: inline-block;
+			}
+			
+			.Content {
+				text-align: center;
+			}
+			
+			#note {
+				display: block;
+				height: calc(20vh - 12vw);
+				padding-top: calc(10vh - 6vw);
+				font-size: 6vw;
+				font-weight: bold;
+			}
+			
+			.star_box{
+				display: block;
+				height: 6vh;
+			}
+			
+			.star {
+				display: inline;
+			}
+			
+			.star li {
+				width: 9vw;
+				display: inline-block;
+				color: #999;
+				font: bold 25px arial;
+				font-size: 7vw;
+				cursor: pointer;
+				transition: color 0.1s;
+			}
+			
+			.star .act {
+				color: #fdd100;
+			}
+			
+		</style>
+
+	</head>
+
+	<body>
+		<header class="White">
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">评分</div>
+			<div id="Right" class="BTN" onmouseup="setScore();">提交</div>
+		</header>
+		<div class="Content">
+			<div id="note">
+				问题已结束<br />
+				给作答的同学打个分吧~
+			</div>
+			<div class="star_box">
+				<p class="option">正确度</p>
+				<ul id="star1" class="star">
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+				</ul>
+			</div>
+			<div class="star_box">
+				<p class="option">流畅度</p>
+				<ul id="star2" class="star">
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+				</ul>
+			</div>
+			<div class="star_box">
+				<p class="option">易懂度</p>
+				<ul id="star3" class="star">
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+					<li>★</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			mui.init();
+			var currnt;
+			var userHash;
+			
+			mui.plusReady(function() {
+				GetStatusTop();
+				current = plus.webview.currentWebview();
+				userHash = plus.storage.getItem('userHash');
+				DoShow(current);
+			});
+			
+			var StarStatus = new Array(-1, -1, -1);
+			
+			/*
+			 * drawStar 画出星星
+			 *   k 用来标识当前需要更新第几栏(1..3)
+			 *   i 选择的评分(1..5)
+			 */
+			function drawStar(k, i) {
+				// 获取第k个星星栏的星星们
+				var starliArr = document.getElementById("star" + k).getElementsByTagName("li");
+				// draw
+				var j = 0
+				for(j; j <= i; j++) {
+					starliArr[j].className = 'act';
+				}
+				for(j; j < starliArr.length; j++) {
+					starliArr[j].className = '';
+				}
+				StarStatus[k - 1] = i + 1;
+			}
+			
+			function setScore() {
+				for(var k = 0; k < 3; k++) 
+					if (StarStatus[k] == -1) {
+						mui.alert("请完成所有评分项目", "评分未完成");
+						return;
+					}
+				CallAJAX('setScore', {
+					"userHash": userHash,
+					"quesId": current.quesId,
+					"score": [StarStatus[0], StarStatus[1], StarStatus[2]]
+				}, function() {
+					ThisClose();
+				}, function() {
+					ThisClose();
+				});
+			}
+			
+			window.onload = function() {
+				for(var k = 1; k <= 3; k++) {
+					// 获取第k个星星栏的星星们
+					var starliArr = document.getElementById("star" + k).getElementsByTagName("li");
+					//用for循环对li进行遍历 
+					for(var i = 0; i < starliArr.length; i++) {
+						// 将匿名函数赋值给onclick
+						starliArr[i].onclick = Function("drawStar(" + k + ", " + i + ");");
+					}
+				}
+			}
+		</script> 
+	</body>
+
+</html>

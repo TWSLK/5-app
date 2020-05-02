@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../Common/css/ufun.css" rel="stylesheet" />
+		<link href="../../../Common/css/mui.min.css" rel="stylesheet" />
+		<link href="../../../Common/css/table_list.css" rel="stylesheet" />
+		<script src="../../../Common/js/mui.min.js"></script>
+		<script src="../../../Common/js/jump.js"></script>
+		<script src="../../../Common/js/tools.js"></script>
+		<script src="../../../Common/js/table_list.js"></script>
+		<script src="../../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script src="../../../Common/js/lib/materialize.min.js"></script>
+		<link href="../../../Common/css/lib/materialize.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			html {
+				background-color: #EEEEEE;
+			}
+			.Card {
+				padding: 4vw 6vw 2vw;
+			}
+
+			.Dept_name {
+				font-size: 5vw;
+				width: 100%;
+				margin-bottom: 2vw;
+			}
+
+			#DeptList,
+			#BadPage {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 消息卡片模板 -->
+		<div class="temp" id="DeptTemplate">
+			<li class="mui-table-view-cell Card waves-effect" quesId="0">
+				<div class="Dept_name">山西大学</div>
+			</li>
+		</div>
+		<!-- 顶栏 -->
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<p id="Title">选择院系</p>
+		</header>
+		<!-- 消息列表 -->
+		<div class="Content Fixed">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" id="DeptList">
+					</ul>
+				</div>
+			</div>
+			<div id="BadPage" style="text-align: center; color: gray;">
+				<h5>网络错误</h5>
+				<h5>请检查网络连接后重新加载</h5>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		var UserHash;
+		var Current;
+		var DeptList = document.getElementById("DeptList");
+
+		mui.init();
+
+		mui.plusReady(function() {
+			GetStatusTop();
+			DoWait();
+			InitScroll();
+			Current = plus.webview.currentWebview();
+			UserHash = plus.storage.getItem("userHash");
+			DoShow(Current);
+			showList();
+		});
+
+		function showList() {
+			DoWait();
+			CallAJAX('listDept', {
+				'schoolId': Current.schoolId,
+			}, function(data) { // success
+				DontWait();
+				BadPage.style.display = "none";
+
+				for (let i in data["deptsList"]) {
+					setTimeout(function() {
+						addDeptCard(data["deptsList"][i], 0);
+					}, 50 * i);
+				}
+			}, function() { // error
+				DontWait();
+				DeptList.style.display = "none";
+				BadPage.style.display = "block";
+			});
+		}
+
+		function addDeptCard(dept) {
+			var newDept = document.getElementById("DeptTemplate").lastElementChild.cloneNode(true);
+
+			newDept.setAttribute("eduid", dept["eduId"].toString());
+			newDept.setAttribute("deptid", dept["deptId"].toString());
+			newDept.onclick = function() {
+				setEdu(parseInt(newDept.getAttribute("eduid")));
+			}
+			newDept.getElementsByClassName("Dept_name")[0].innerText = dept["deptName"];
+			DeptList.appendChild(newDept);
+			newDept.classList.add("Done");
+
+			DeptList.style.display = "block";
+		}
+		
+		function setEdu(eduId) {
+			CallAJAX('setEdu', {
+				'userHash': UserHash,
+				'eduId': eduId,
+			}, function() {
+				mui.toast('修改成功');
+				endSetting();
+			}, function() {
+				mui.toast('修改失败');
+				endSetting();
+			});
+		}
+		
+		function endSetting() {
+			plus.webview.close(plus.webview.getWebviewById('SetEdu'), 'none', 0);
+			mui.fire(plus.webview.getWebviewById('MainView'), 'refresh');
+			mui.fire(Current.opener(), 'refresh');
+			Current.close();
+		}
+	</script>
+
+</html>

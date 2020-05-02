@@ -1,0 +1,74 @@
+.mui-plus-pullrefresh .mui-scroll {
+	position: absolute;
+	width: 100% !important;
+}
+
+.mui-scroll::before {
+	content: "下拉刷新页面";
+	position: absolute;
+	width: 100vw;
+	left: 0;
+	top: -8vw;
+	font-size: 4vw;
+	text-align: center;
+	color: #484848;
+}
+
+.mui-scroll-wrapper {
+	height: 100%;
+}
+
+.mui-scroll-wrapper, .mui-scroll, .mui-table-view {
+	background-color: transparent!important;
+}
+
+.mui-table-view:after,
+.mui-table-view-cell:after {
+	display: none;
+}
+
+.mui-table-view-cell {
+	margin-bottom: 1px;
+	box-shadow: 0 2px 6px #E0E0E0;
+}
+.Card {
+	/* height: 28vw; */
+	display: none;
+	width: 100%;
+	opacity: 0;
+	position: relative;
+	background-color: transparent;
+}
+
+@keyframes Card_make_done {
+	0% {
+		opacity: 0;
+		height: 0;
+		margin-left: 20vw;
+	}
+	20% {
+		opacity: 0;
+		height: intrinsic;
+	}
+
+	50% {
+		margin-left: 0;
+	}
+
+	100% {
+		opacity: 1;
+		background-color: #FFFFFF;
+	}
+}
+
+.Card.Done {
+	animation: Card_make_done;
+	animation-duration: 0.5s;
+	opacity: 1;
+	display: block;
+	background-color: #FFFFFF;
+}
+
+.Card:active {
+	/* background: rgba(200,200,200,0.6); */
+}

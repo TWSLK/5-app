@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html style="background: white;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../Common/js/lib/summernote-0.8.16-dist/summernote-lite.min.css" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="../../Common/js/lib/summernote-0.8.16-dist/lang/summernote-zh-CN.min.js"></script>
+		<style>
+			a {
+				display: block;
+			}
+			* {
+				background-color: #FFFFFF!important;
+			}
+			
+			.Reward-BTN {
+				position: absolute;
+				text-align: center;
+				font-size: 4vw;
+				width: 20vw;
+				height: 8vw;
+				line-height: 9vw;
+				top: 15vw;
+				overflow: auto;
+				color: #000000;
+				border: 1px solid #000000;
+			}
+			
+			.Reward-BTN.Active {
+				color: #DDBB00;
+				border: 1px solid #DDBB00;
+			}
+			
+			#BTN0 {
+				left: 4vw;
+			}
+			
+			#BTN1 {
+				left: 30vw;
+			}
+			
+			#LecTitle {
+				font-size: 15px;
+				width: 92vw;
+				padding: 2px 10px;
+				height: 25px;
+				line-height: 25px;
+				border: 0;
+				border-bottom: 1px solid #ddd;
+				margin: 0!important;
+			}
+			
+			#LecTitle, #summernote {
+				outline: none!important;
+			}
+			
+			#LecTitle::-webkit-input-placeholder {
+				color: #888888;
+				font-weight: 700;
+			}
+			
+			.note-editor {
+				display: block;
+				position: fixed;
+				bottom: 0;
+				top: calc(40px + 25px);
+				left: 0;
+				right: 0;
+			}
+			
+			.note-editing-area, .note-editable {
+				height: 100%!important;
+			}
+			
+			.BottomFixed {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				display: none;
+				opacity: 0;
+				transition: opacity 0.5s;
+				z-index: 10;
+			}
+			.BottomFixed.show {
+				display: block;
+				opacity: 1;
+			}
+			.BottomFixed > div {
+				display: flex;
+			}
+			.BottomFixed button {
+				flex: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="White">
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<p id="Title">开讲</p>
+			<div id="Right" class="BTN" onmouseup="updateLec();">发布</div>
+		</header>
+		<div class="Content Fixed" style="display: block; opacity: 1;">
+			<div class="input-field col s6" style="margin: 0;">
+				<input type="text" id="LecTitle" placeholder="输入讲座标题"/>
+			</div>
+			<textarea rows="30" type="text" placeholder="输入讲座内容" id="summernote"></textarea>
+		</div>
+	</body>
+	<script>
+		var current;
+		var userHash;
+		var Title = ID('LecTitle');
+		var Content = $('#summernote');
+		var haveReward = true;
+
+		mui.init();
+		mui.plusReady(function() {
+			GetStatusTop();
+			current = plus.webview.currentWebview();
+			userHash = plus.storage.getItem('userHash');
+			current.show("slide-in-bottom", 300);
+		});
+		
+		Content.summernote({
+			placeholder: '输入讲座内容',
+			lang: 'zh-CN',
+			tabsize: 4,
+			minHeight: 100,
+			toolbar: [
+				//['style', ['style']],
+				//['font', ['bold', 'underline', 'italic'/*, 'clear'*/]],
+				//['color', ['color']],
+				//['para', ['ul', 'ol', 'paragraph']],
+				//['table', ['table']],
+				//['insert', [/*'link', */'picture' /*, 'video'*/ ]],
+				//['view', ['fullscreen']],
+				['tools', ['bold', 'italic', 'picture', 'fullscreen']]
+			]
+		});
+		//setTimeout(function() {
+			$('.note-editor')[0].style.border = "0";
+			$('.note-editor')[0].style.border = "0";
+			//$('.note-editor')[0].style.borderBottom = "1px solid #999";
+			$('.note-editor .note-statusbar')[0].style.display = "none";
+			$('.note-editor .note-editable')[0].classList.add('EditArea');
+		//}, 500);
+			$('.note-editor .note-toolbar')[0].classList.add('BottomFixed');
+			$('.note-editable')[0].onfocus = function() {
+				$('.note-editor .note-toolbar')[0].classList.add('show');
+			}
+			$('#LecTitle')[0].onfocus = function() {
+				$('.note-editor .note-toolbar')[0].classList.remove('show');
+			}
+
+		function updateLec() {
+			if (!CheckLength("讲座标题", Title.value, 100, 5))
+				return;
+			if (!CheckLength("讲座内容", Content.summernote('code'), 32767, 100))
+				return;
+			CallAJAX("changeLec", {
+				"userHash": userHash,
+				"lecTitle": Title.value,
+				"lecText": Content.summernote('code'),
+				"action": "write"
+			}, function(data) {
+				if (data["res"] == "ok") {
+					mui.toast('讲座发布成功');
+					JumpToLec(data['lecId'], '../../');
+					ThisClose();
+				} else {
+					mui.alert('请检查网络设置', '提交失败');
+				}
+			});
+		}
+	</script>
+</html>

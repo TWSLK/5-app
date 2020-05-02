@@ -1,0 +1,366 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>设置自我介绍</title>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="../Common/css/ufun.css" type="text/css" rel="stylesheet"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		</head>
+	</head>
+	
+	<style type="text/css">
+		body{
+			font-family: "Source Han Sans CN";
+			background-color: #fff;
+			overflow-x:hidden;
+			overflow-y:hidden;
+			padding-left: env(safe-area-inset-left);
+			padding-right: env(safe-area-inset-right);
+		}
+		
+		.circle-x {
+			background: var(--color-yellow);
+			position: fixed;
+			overflow: hidden;
+		}
+		
+		#Circle2 {
+			left: -12vh;
+			top: -8vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle4 {
+			right: -1vh;
+			top: -6vh;
+			width: 13vh;
+			height: 13vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle5 {
+			right: -4vh;
+			top: 4.5vh;
+			width: 10vh;
+			height: 10vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle6 {
+			right: -3vh;
+			bottom: -5vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle7 {
+			right: -15vh;
+			bottom: -1vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle8 {
+			left: -3vh;
+			top: -9vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		#Circle9 {
+			left: -5vh;
+			bottom: -3vh;
+			width: 14vh;
+			height: 14vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius:10vh;
+		}
+		
+		.profile-picture{
+			text-align: center;
+			margin: 10vh auto 0 auto;
+		}
+		
+		@-webkit-keyframes fadeInOut {
+		  0% {
+		    opacity: 0;
+			width: 0%;
+		  }
+		  50% {
+		    opacity: 1;
+			width: 75%;
+		  }
+		  75% {
+		    opacity: 1;
+			width: 100%;
+		  }
+		}
+		
+		.profile-picture {
+		  -webkit-animation-name: fadeInOut;
+		  -webkit-animation-timing-function: ease-in-out;
+		  -webkit-animation-iteration-count: 1;
+		  -webkit-animation-duration: 3s;
+		  -webkit-animation-direction: alternate;
+		}
+		
+		@-webkit-keyframes fadeInOut {
+		  0% {
+		    opacity: 0;
+			width: 0%;
+		  }
+		  50% {
+		    opacity: 1;
+			width: 80%;
+		  } 
+		}
+		
+		#inpt, .set-btn, .profile-steps {
+		  -webkit-animation-name: fadeInOut;
+		  -webkit-animation-timing-function: ease-in-out;
+		  -webkit-animation-iteration-count: 1;
+		  -webkit-animation-duration: 3s;
+		  -webkit-animation-direction: alternate;
+		}
+		
+		.main-title {
+			text-align: center;
+			margin-top: 9vh;
+		}
+		
+		.main-title a {
+			color: #4B4A48;
+			font-size: 5vw;
+		}
+		
+		.profile-picture img{
+			width: 30vh;
+		}
+		
+		#inpt {
+			text-align: center;
+			float: none;
+			text-align: center;
+			width: 80%;
+			color: #CDCDCD;
+			resize:none;
+		}
+		
+		
+		.col {
+			margin: 5vh auto 0 auto;
+			resize:none;
+		}
+		
+		.set-btn-container {
+			margin: 2.9vh auto 0vh auto;
+			text-align: center;
+			align-items: center;
+		}
+		
+		.set-btn-container button{
+			color: #fff;
+			align-items: center;
+		}
+		
+		.set-btn {
+			width: 80%;
+			height: 5.5vh;
+			background: #f67575 !important;
+			box-shadow: none !important;
+			border-radius: 4.8vh;
+			border-style: none;
+			color: #4b4a48;
+			font-size: 3vw;
+			margin-top: 3vh;
+			box-shadow: none;
+			align-items: center;
+		}
+		
+		
+		/* label color */
+		.input-field label {
+		   color: #CDCDCD;
+		}
+
+		.input-field i{
+			color: #CDCDCD;
+		}
+		/* icon prefix focus color */
+		.input-field .prefix.active {
+			color: #f67575;
+		}
+		
+		.input-field textarea:focus {
+			border-bottom: 1px solid #f67575 !important;
+			box-shadow: 0 1px 0 0 #f67575 !important;
+		}
+		
+		.input-field label.active {
+			color: #f67575 !important;
+		}
+		
+		.link-area {
+			display: block;
+			margin-top: 2vh;
+			text-align: center;
+			align-items: center;
+		}
+		
+		.link-area a{
+			color: #cdcdcd;
+			font-size: 3vw;
+			font-weight: 200;
+		}
+		
+		.profile-steps {
+			text-align: center;
+			align-items: center;
+			width: 80%;
+			margin: 1vh auto 0 auto;
+			display: flex;
+			
+		}
+		
+		.profile-steps div{
+			text-align: center;
+			margin: 1vh auto 1vh auto;
+		}
+		
+		
+		#Step1 {
+			background: #cdcdcd;
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			margin-left: 10vh;
+			
+		}
+		
+		#Step2 {
+			background: #cdcdcd;
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			
+		}
+		
+		#Step3 {
+			background: #f67575;
+			width: 4vh;
+			height: 1vh;
+			-moz-border-radius: 15vh;
+			-webkit-border-radius: 15vh;
+			border-radius:15vh;
+			margin-right: 10vh;
+		}
+		
+		.line-spliter {
+			color: #f67575;
+			padding: 0vh 1vh;
+		}
+	
+		
+		.materialize-textarea {
+			max-height: 15vh;
+			overflow-y: scroll;
+		}
+		
+		
+	</style>
+	
+	<body>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		
+		<div class="profile-picture">
+			<img src="img/undraw_winners_ao2o.svg" >
+		</div>
+		
+		<div class="circle-container">
+			<div id="Circle2" class="circle-x"></div>
+			<div id="Circle3" class="circle-x"></div>
+			<div id="Circle4" class="circle-x"></div>
+			<div id="Circle5" class="circle-x"></div>
+			<div id="Circle6" class="circle-x"></div>
+			<div id="Circle7" class="circle-x"></div>
+			<div id="Circle8" class="circle-x"></div>
+			<div id="Circle9" class="circle-x"></div>
+		</div>
+		
+		<div class="main-title">
+			<a>做个自我介绍吧</a>
+		</div>
+		
+			 <div class="row">
+				<form class="col s12">
+				  <div class="row">
+					<div class="input-field col s6" id="inpt">
+					  <textarea name="user_name" id="icon_prefix2" class="materialize-textarea" data-length="200" maxlength="200" placeholder="双学位博士balabalabala"></textarea>
+					  <label for="icon_prefix2" id="namelable">输入自我介绍</label>
+					</div>
+				  </div>
+				</form>
+		  </div>
+
+		<script type="text/javascript">
+			//监测输入内容的字数
+			document.addEventListener("DOMContentLoaded", function(){
+				const counter = document.querySelectorAll("textarea#icon_prefix2");
+				M.CharacterCounter.init(counter);
+			})
+			
+
+		</script>
+			
+		<form class="set-btn-container" method="get" onsubmit="isTextAreaNull()" action="welcome-page.html">
+		    <button type="submit" class="set-btn">完成</button>
+		</form>
+		
+		<div class="profile-steps">
+			<div id="Step1"></div>
+			<div id="Step2"></div>
+			<div id="Step3"></div>
+		</div>
+		
+		<div class="mui-content-padded">
+			<div class="link-area">
+				<a id="Reg" href="set-school.html">返回</a> 
+
+				<span class="line-spliter">|</span>
+				<a id="ForgetPassword" href="welcome-page.html">跳过</a>
+			</div>
+		</div>
+		
+	</body>
+
+</html>

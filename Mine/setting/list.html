@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<link href="../../Common/css/mui.min.css" rel="stylesheet" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="js/settings.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script type="text/javascript" src="../../Common/js/lib/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="../../Common/css/lib/materialize.min.css">
+		<script src="../../Common/js/lib/materialize.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			html {
+				background-color: #EEEEEE;
+			}
+			ul {
+				margin-bottom: 3vw!important;
+			}
+			
+			.allwidth {
+				width: 100vw;
+			}
+
+			.Cell_right {
+				float: right;
+				color: gray;
+				margin-right: 30px;
+			}
+
+			.Cell_left {
+				float: left;
+				color: black;
+			}
+
+			#Head_img {
+				height: 15vw;
+				width: 15vw;
+				border: 1px solid #999999;
+				border-radius: 100%;
+			}
+
+			#Head_content {
+				height: 15vw;
+				line-height: 15vw;
+			}
+
+			#ReLogin {
+				width: 100%;
+				/* margin-left: 5%; */
+				margin-top: 3vw;
+				padding: 3vw;
+				font-size: 5vw;
+				border-radius: 0;
+				border: 0;
+			}
+
+			#ReLogin:active {
+				background-color: #990000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 标题栏 -->
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<p id="Title">设置</p>
+		</header>
+		<!-- 列表内容 -->
+		<div class="Content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="ChangeHeadImg();">
+					<div class="mui-navigate-right">
+						<div id="Head_content">
+							<img class="Cell_right" id="Head_img" />
+							<div class="Cell_left" id="Head_text">头像</div>
+						</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToSetNick(UserInfo['uNick']);">
+					<div class="mui-navigate-right">
+						<div class="Cell_right" id="Nick">&nbsp;</div>
+						<div class="Cell_left">昵称</div>
+					</div>
+				</li>
+				<!-- <li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToSetPswd();">
+					<div class="mui-navigate-right">
+						<div class="Cell_right">********</div>
+						<div class="Cell_left">密码</div>
+					</div>
+				</li> -->
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToSetEdu();">
+					<div class="mui-navigate-right">
+						<div class="Cell_left">教育经历</div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToSetCV(UserInfo['uCV']);">
+					<div class="mui-navigate-right">
+						<div class="Cell_left">个人简介</div>
+					</div>
+				</li>
+			</ul>
+			<!-- <li class="mui-table-view-divider"></li> -->
+			<!-- <ul class="mui-table-view">
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToSetMsg();">
+					<div class="mui-navigate-right">
+						<div class="Cell_left">消息推送设置</div>
+					</div>
+				</li>
+			</ul> -->
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell waves-effect allwidth" onclick="JumpToAbout();">
+					<div class="mui-navigate-right">
+						<div class="Cell_left">关于我们</div>
+					</div>
+				</li>
+			</ul>
+			<div class="mui-btn mui-btn-danger waves-effect allwidth" id="ReLogin" onclick="ReLogin(true);">
+				<div>退出登录</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var UserInfo;
+			mui.init({
+				beforeback: function() {
+					//屏蔽 默认退出函数 并绑定到 退出整个应用的退出函数 上
+					//所有在主界面中嵌套的页面都需要填写此字段
+					mui.fire(plus.webview.currentWebview().opener(), "refresh");
+					return true;
+				}
+			});
+			mui.plusReady(function() {
+				GetStatusTop();
+				DoWait();
+				UserInfo = JSON.parse(plus.storage.getItem("userInfo"));
+				if (UserInfo == null) {
+					mui.alert("请稍后重试", "网络错误", function(e) {
+						DontWait();
+						plus.webview.currentWebview().close();
+					});
+					return;
+				}
+				drawPage();
+				RefreshUserInfo(function() {
+					drawPage();
+				});
+			});
+			
+			window.addEventListener("refresh", function(e) {
+				RefreshUserInfo(function() {
+					drawPage();
+				});
+			});
+			
+			function drawPage() {
+				UserInfo = JSON.parse(plus.storage.getItem("userInfo"));
+				if (!UserInfo)
+					return;
+				document.getElementById("Head_img").src = _ServerLoc + UserInfo["uHeadImgLoc"];
+				document.getElementById("Nick").innerHTML = UserInfo["uNick"];
+
+				DoShow(plus.webview.currentWebview(), "slide-in-right", 250);
+			}
+		</script>
+	</body>
+
+</html>

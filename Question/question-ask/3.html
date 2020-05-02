@@ -1,0 +1,72 @@
+<!doctype html>
+<html style="background-color: white;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="../../Common/css/ufun.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<style>
+			#Info {
+				position: fixed;
+				top: 30vh;
+				font-size: 8vw;
+				font-weight: bold;
+				color: #BBDD00;
+				text-align: center;
+				width: 100%;
+			}
+
+			#GoToQues {
+				position: fixed;
+				top: 70vh;
+				font-size: 8vw;
+				font-weight: bold;
+				color: black;
+				text-align: center;
+				width: 20vw;
+				margin-left: 40vw;
+				font-size: 5vw;
+				border-bottom: 1px solid black;
+			}
+			
+			#QuesId {
+				position: fixed;
+				bottom: 2vh;
+				right: 3vw;
+				font-size: 2vw;
+				color: #CFCFCF;
+				text-align: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="Info">提问成功</div>
+		<div onclick="goToQues();" id="GoToQues">查看问题</div>
+		<div id="QuesId">问题ID: </div>
+	</body>
+
+	<script>
+		var QuesId;
+		var Current;
+		mui.init();
+		mui.plusReady(function() {
+			GetStatusTop();
+			Current = plus.webview.currentWebview();
+			quesId = Current.quesId;
+			ID('QuesId').innerHTML += quesId;
+			// 关闭前两个页面
+			let wvs = plus.webview.all();
+			for (let wv of wvs) {
+				if (wv.id === 'QuesAsk' || wv.id === 'QuesAsk_2')
+					wv.close('none', 0);
+			}
+		});
+		function goToQues() {
+			JumpToQues(quesId, '../../');
+			ThisClose();
+		}
+	</script>
+</html>

@@ -1,0 +1,103 @@
+/**
+ * @author dhc
+ * @modified 2020/04/20
+ * summernote库的适配css(使用summernote的文本编辑器页面专用)
+ */
+
+.note-editor {
+	--top: 40;
+	display: block;
+	margin-top: -10px;
+	/* 20px; */
+	transition: margin-top 0.2s ease-out;
+}
+
+.note-editor,
+.note-editor * {
+	font-size: 14px;
+	line-height: unset;
+	/* 配合编辑器, 这里只能用px指定 */
+}
+
+.note-editor ul,
+.note-editor ol {
+	padding-left: 20px;
+}
+
+.note-editor pre {
+	margin: 5px 0;
+	padding-left: 4px;
+	border-left: 8px solid var(--color-gray-medium);
+	color: var(--color-white);
+	background-color: var(--color-gray-dark);
+}
+
+.note-editor h1 {
+	font-size: 28px;
+}
+
+.note-editor h2 {
+	font-size: 26px;
+}
+
+.note-editor h3 {
+	font-size: 24px;
+}
+
+.note-editor h4 {
+	font-size: 22px;
+}
+
+.note-editor h5 {
+	font-size: 20px;
+}
+
+.note-editor h6 {
+	font-size: 18px;
+}
+
+.note-editing-area,
+.note-editable {
+	height: 100% !important;
+}
+
+.note-editing-area {
+	padding: 0 2.5vw;
+}
+
+.note-editing-toolbar {
+	position: absolute;
+	top: calc(var(--top) * -1px);
+	left: 0;
+	right: 0;
+	border: 0;
+	border-top: 1px solid var(--color-gray-light);
+	display: none;
+	background-color: transparent;
+	z-index: 10;
+}
+
+@keyframes toolbar-show {
+	from {
+		display: block;
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.note-editing-toolbar.show {
+	animation: toolbar-show 0.8s;
+	display: block;
+	opacity: 1;
+}
+
+.note-editing-toolbar>div {
+	display: flex;
+}
+
+.note-editing-toolbar>div>button {
+	flex: auto;
+}

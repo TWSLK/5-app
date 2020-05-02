@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!-- 讲座详情页面 -->
+<!-- author: 冀彤璐 -->
+<!-- 2020/4/25 -->
+<html>
+	<head>
+		<title> 讲座详情页面 </title>
+		
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+		
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		
+		<script src="Common/js/tools.js"></script>
+		<script src="js/mui.min.js"></script>
+		<link rel="stylesheet" href="../Common/css/ufun.css">
+		<link rel="stylesheet" type="text/css" href="../../Common/css/table_list.css" />
+	</head>
+
+<style type="text/css">
+	html {
+		background-color: #eeeeee;
+	}
+	
+	body {
+		font-family: "Source Han Sans CN";
+		background-color: #eeeeee;
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);	
+		padding: 0; 
+		margin: 0;
+	}
+	
+	/* 顶部导航栏 */
+	header {
+		opacity: 1;
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	#left {
+		padding-left: 5vw;
+	}
+	
+	#right {
+		padding-right: 5vw;
+	}
+	
+	/* 这部分是头部第一个卡片的CSS样式,封面，标题，校圈等信息 */
+	.lecture-head{
+		margin-top: 4.796vh;
+		background-color: var(--color-white);
+		padding: 5vw;
+	}
+	
+	#lecture-cover {
+		width: 11vh;
+		height: 11vh;
+		border-radius: 1vh;
+		margin-right: 2vh;
+		flex-shrink:0;
+		background-color: var(--color-gray-dark);
+	}
+	
+	.lecture-title {
+		position: relative;
+		display: flex;
+		font-weight: 700;
+		font-size: 4vw;
+		margin: 0vh 0vh 0.5vh 0vh;
+	}
+	
+	.lecture-head-info {
+		display: flex;
+		align-items: flex-start;
+		position: relative;
+	}
+	
+	.lecture-school {
+		text-align: left;
+		position: relative;
+		display: flex;
+		font-size: 2vw;
+		font-weight: 400;
+	}	
+		
+	#school-name {
+		font-style:italic;
+	}
+	
+	.lecture-info {
+		text-align: left;
+		margin-top: 0.2vh;
+		display: flex;
+		font-size: 2vw;
+		align-items: center;
+		font-weight: 400;
+	}
+		
+	#info-divider {
+		width: 0.5vh;
+		height: 0.5vh;
+		background: var(--color-gray-dark);
+		-moz-border-radius: 10vh;
+		-webkit-border-radius: 10vh;
+		border-radius: 10vh;
+		margin: 1vh;
+	}
+	
+	#recommend {
+		color: var(--color-yellow);
+	}	
+	
+	#recommend-num {
+		color: var(--color-yellow);
+	}
+	
+	#view {
+		color: var(--color-gray-light);
+	}
+	
+	#view-num {
+		color: var(--color-gray-light);
+	}
+	
+	.time-and-price {
+		display: flex;
+		font-size: 2vw;
+		position: relative;
+		align-items: center;
+		justify-content:space-between ;
+		margin-top: 1vh;
+	}
+	
+	.read-time-info {
+		display: flex;
+		font-weight: 300;
+		color: var(--color-gray-light);
+		align-items: center;
+	}
+	
+	.lecture-price-container {
+		float: right;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+		width:6vh;
+		height:inherit;
+		background:var(--color-yellow);
+		border-radius: 0.5vh;
+	}
+	
+	#price-container {
+		height:inherit;
+		display: inline-flex;
+	}
+	
+	#price{
+		color: var(--color-gray-dark);
+		font-weight: 600;
+	}
+	
+	#price-unit {
+		color: var(--color-gray-dark);
+		font-weight: 600;
+	}
+	
+	/* 这部分是讲座介绍中间这部分的CSS */
+	.lecture-intro {
+		background-color: var(--color-white);
+		padding: 5vw;
+		margin: 1vh auto;
+	}
+	
+	#description-title {
+		font-weight: 500;
+		
+	}
+	
+	#description-content {
+		color: var(--color-gray-medium);
+		font-weight: 400;
+		margin: 1vh 1vh;
+	}
+	
+	.instructor-divider {
+		margin: 2.5vh auto;
+	}
+	
+	
+	#instructor-title {
+		font-weight: 500;
+	}
+	
+	.instructor-info-container {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	
+	#instructor-profile-pic {
+		width: 6vh;
+		height: 6vh;
+		background: var(--color-gray-dark);
+		-moz-border-radius: 10vh;
+		-webkit-border-radius: 10vh;
+		border-radius: 10vh;
+		margin: 1vh 0vh;
+		display: flex;
+		float: left;
+	}
+	
+	#instructor-name {
+		margin-left: 1.5vh;
+		position: relative;
+		display: flex;
+	}
+	
+	.subscript-container {
+		/* border: solid 1px red; */
+		background:var(--color-yellow);
+		width: 7vh;
+		height: 3vh;
+		text-align: center;
+		align-items: center;
+		border-radius: 1vh;
+		font-size: 1.5vw;
+		display: inline-flex;
+		justify-content: center;
+	}
+	
+	.InstructorPart {
+		align-items: center;
+		display: inline-flex;
+	}
+	
+/* 	#Subscript {
+		color:white;
+		width: 6vh;
+		height: 3vh;
+		border: solid 1px red;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		margin-right: 0.6vh;
+	}
+	
+	#plus {
+		color: white;
+		font-weight: 700;
+		align-items: center;
+		height: inherit;
+		border: solid 1px red;
+		display: flex;
+		margin-left: 0.7vh;
+	} */
+	
+	.subscript-container img {
+		width: 7vh;
+	}
+	
+	
+	.material-icons {
+		font-size: 2vh;
+	}
+	
+	.CV {
+		color: var(--color-gray-medium);
+		font-weight: 400;
+		margin: 1vh 1vh;
+	}
+	
+	/* 讲座内容部分 */
+	.lecture-content {
+		background-color: var(--color-white);
+		padding: 5vw;
+		margin: 1vh auto;
+	}
+	
+	.content-title {
+		font-weight: 500;
+	}
+	
+	.the-content {
+		color: var(--color-gray-medium);
+		font-weight: 400;
+		margin: 1vh 0vh;
+	}
+	
+	
+	#hide-content {
+		background-color: var(--color-white);
+		height: 31vh;
+		padding: 1vh 2vh;
+		margin: 1vh auto;
+		display: flex;
+		justify-content: center;
+	}
+	
+	#hide-content span {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    color: var(--color-gray-dark);
+	    font-size: 3.8vw;
+	    height: 4vh;
+		margin-top: 8vh;
+	    border-bottom: 1px solid var(--color-gray-dark);
+	}
+	
+	footer {
+		height:7vh;
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+		background-color: white;
+		display: flex;
+		align-items: center;
+		border-top: solid 1px #dadada;
+	}
+	
+	.like-btn {
+		margin-left: 2vh;
+		width:15vh;
+		height: 4.6vh;
+		display: flex;
+		align-items: center;
+		color: white;
+		font-size: 2.5vw;
+		border-radius: 2.3vh;
+		background-color:var(--color-gray-dark);
+		justify-content: space-evenly;
+	}
+	
+	.like-btn img {
+		width: 1.6vh;
+	}
+	
+	
+	#like-part, #dislike-part {
+		align-items: center;
+		display: flex;
+		height: inherit;
+	}
+	
+	#like-part img{
+		margin-right: 1vh;
+	}
+	
+	#spliter {
+		height: inherit;
+		width: 0.5vh;
+		font-weight: 100;
+		display: flex;
+		align-items: center;
+	}
+
+	#dislike-part {
+		width: 2vh;
+	}
+	
+	.pay-to-read-btn{
+		width:22vh;
+		height: 4.6vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-gray-dark);
+		font-size: 3.8vw;
+		font-weight: 500;
+		border-radius: 2.3vh;
+		border-style: none;
+		background-color:var(--color-yellow);
+	}
+	
+	#need-payment-footer {
+		justify-content: center;
+	}
+	
+</style>
+
+<body>
+	
+<!-- 	<header>
+		<div id="go-back" class="BTN" onmouseup="ThisClose();">
+			<i class="material-icons">keyboard_arrow_left</i>
+		</div>
+		<div id="tools" class="BTN" onmouseup="showMenu();">
+			<i class="material-icons">more_horiz</i>
+		</div>
+	</header> -->
+	
+	<!-- 讲座页面的顶部导航栏 -->
+	<header>
+		<div id="left" class="BTN" onmouseup="ThisClose();">
+			<i class="material-icons">keyboard_arrow_left</i>
+		</div>
+		
+		<div id="right" class="BTN" onmouseup="showMenu();">
+			<i class="material-icons">more_horiz</i>
+		</div>
+	</header>
+	
+	<!-- 讲座页面的头部信息 -->
+	<div class = "lecture-head">		
+		<div class="lecture-head-info">
+			<div id="lecture-cover">
+				<img src="" >
+			</div>
+			
+			<div id="head-right-part">
+				<div class="lecture-title">
+					讲座的标题讲座的标题讲座的标题讲座的标题
+				</div>
+				
+				<!-- 这部分的校圈和后面的字是分开的，直接获取修改校圈名 -->
+				<div class="lecture-school">
+					<div>文章来自于&nbsp </div>
+					<div id="school-name">山西大学</div>
+					<div>&nbsp &nbsp校圈</div>
+				</div>
+			
+			<!-- 这部分的数字和后面的字是分开的，直接获取修改数字 -->
+				<div class="lecture-info">
+					<div id="recommend-num">322</div>
+					<div id="recommend">&nbsp推荐</div>
+					<div id="info-divider"></div>
+					<div id="view-num">322</div>
+					<div id="view">&nbsp阅读</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 这部分的数字和后面的字是分开的，直接获取修改数字 -->
+		<div class="time-and-price">
+			<div class="read-time-info">
+				<div>阅读时间约为</div>
+				<!-- 下面这个id ReadTime是阅读时间 -->
+				<div id="read-time">10</div> 
+				<div id="read-time-unit">分钟</div>
+			</div>
+			
+			<div class="lecture-price-container">
+				<div id="price-container">
+					<div id="price">1</div>
+					<div id="price-unit">元</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 讲座页面的中间部分，讲座介绍和讲师介绍 -->
+	<div class="lecture-intro">
+		<div class="lecture-description">
+			<div id="description-title">讲座介绍</div>
+			<div id="description-content">这句话的位置是介绍讲座的内容这句话的位置是介绍讲座的内容</div>
+		</div>
+		
+		<div class="instructor-divider">
+			<HR align=center width=100% color=#4b4a48 SIZE=1>
+		</div>
+		
+		<div class="InstructorInfo">
+			<div id="instructor-title">讲师介绍</div>
+			<div class="instructor-info-container">
+				<div class="InstructorPart">
+					<div id="instructor-profile-pic"></div>
+					<div id="instructor-name">用户名</div>
+				</div>
+				
+				<div class="subscript-container">
+
+					<!-- <i class="material-icons" id="plus">add</i> -->
+					<!-- <div id="Subscript">关注</div> -->
+					<img src="../Question/question_detail/img/follow.png" >
+
+				</div>
+			</div>
+			
+			<div class="CV">
+				用户的个人简介
+			</div>
+		</div>
+	</div>
+	
+	<!-- 讲座页面的内容部分，讲座的内容 -->
+	<div class="lecture-content">
+		<div class="content-title">
+			讲座内容
+		</div>
+			
+		<div class="the-content">
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+			讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容讲座内容
+		</div>
+	</div>
+	
+	
+	<!-- 未付费时，显示的“隐藏内容”卡片 -->
+	<div id="hide-content">
+		<span>讲座内容已被隐藏，请付费查看正文</span>
+	</div>
+	
+	<!-- 完成付费后--底部导航栏 -->
+	<footer id="paid-footer">
+		<div class="like-btn">
+			<div id="like-part">
+				<img id="like" src="../Question/question_detail/img/like.png">
+				推荐
+			</div>
+			
+			<span id="spliter"><div>|</div></span>
+			
+			<div id="dislike-part">
+				<img src="../Question/question_detail/img/dislike.png" >
+			</div>
+		</div>
+	</footer>
+	
+	<!-- 未付费时--底部导航栏 -->
+	<footer id="need-payment-footer">
+		<button type="submit" class="pay-to-read-btn">付费阅读正文</button>
+	</footer>
+	
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title> 注册页面 </title>
+
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="../Common/css/ufun.css" type="text/css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+		<script src="../Common/js/mui.min.js"></script>
+		<script src="../Common/js/tools.js"></script>
+	</head>
+
+	<style type="text/css">
+		body {
+			font-family: "Source Han Sans CN";
+			background-color: #fff;
+			overflow-x: hidden;
+			overflow-y: hidden;
+			padding-left: env(safe-area-inset-left);
+			padding-right: env(safe-area-inset-right);
+		}
+
+		.circle-x {
+			background: var(--color-yellow);
+			position: fixed;
+			overflow: hidden;
+		}
+
+		#Circle2 {
+			left: -10vh;
+			top: -10vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle4 {
+			right: -6vh;
+			top: -6vh;
+			width: 13vh;
+			height: 13vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle5 {
+			right: -7vh;
+			top: 4.5vh;
+			width: 10vh;
+			height: 10vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle6 {
+			right: -11vh;
+			bottom: -5vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle7 {
+			right: -5vh;
+			bottom: -13vh;
+			width: 18vh;
+			height: 18vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle8 {
+			left: -3vh;
+			bottom: -10vh;
+			width: 15vh;
+			height: 15vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		#Circle9 {
+			left: -10vh;
+			bottom: -3vh;
+			width: 14vh;
+			height: 14vh;
+			-moz-border-radius: 10vh;
+			-webkit-border-radius: 10vh;
+			border-radius: 10vh;
+		}
+
+		.reg-picture {
+			text-align: center;
+			margin: 10vh auto 0 auto;
+		}
+
+		@keyframes scaleDraw {
+
+			/*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+			0% {
+				transform: scale(1);
+				/*开始为原始大小*/
+			}
+
+			25% {
+				transform: scale(1.1);
+				/*放大1.1倍*/
+			}
+
+			50% {
+				transform: scale(1);
+			}
+
+			75% {
+				transform: scale(1.1);
+			}
+		}
+
+		.reg-picture {
+			-webkit-animation-name: scaleDraw;
+			/*关键帧名称*/
+			-webkit-animation-timing-function: ease-in-out;
+			/*动画的速度曲线*/
+			-webkit-animation-iteration-count: infinite;
+			/*动画播放的次数*/
+			-webkit-animation-duration: 5s;
+			/*动画所花费的时间*/
+		}
+
+
+		.reg-picture img {
+			width: 30vh;
+		}
+
+		.reg-form {
+			width: 80%;
+			margin: 1.2vh auto 0 auto;
+		}
+
+		.text-box {
+			align-items: center;
+			border-bottom: 0.12vh solid #CDCDCD;
+			display: flex;
+			margin: 4vh auto 0 auto;
+		}
+
+		.text-box input {
+			border-style: none;
+			outline: none;
+			background: none;
+			font-size: 3vw;
+			color: #4B4A48;
+			margin: 0 auto;
+			float: left;
+			margin: 2vh 1vh;
+			align-items: center;
+		}
+
+		#password1::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		#password2::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		#tel_input::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		#ValiContainer {
+			display: inline-flex;
+			flex-direction: row;
+			width: 100%;
+			align-items: center;
+
+		}
+
+		.get-cap {
+			float: right;
+			width: 40%;
+		}
+
+		#request {
+			color: var(--color-yellow);
+			font-size: 3vw;
+		}
+
+		#ValidateInput::-webkit-input-placeholder {
+			color: #cdcdcd;
+		}
+
+		i {
+			color: #cdcdcd;
+		}
+
+		.set-btn-container {
+			margin: 2.9vh auto 0vh auto;
+			text-align: center;
+		}
+
+		.set-btn {
+			width: 100%;
+			height: 5.5vh;
+			background: var(--color-yellow);
+			border-radius: 4.8vh;
+			border-style: none;
+			color: #4b4a48;
+			font-size: 3vw;
+			margin-top: 3vh;
+		}
+
+		.link-area {
+			display: block;
+			margin-top: 2vh;
+			text-align: center;
+			align-items: center;
+		}
+
+		.link-area a {
+			color: #cdcdcd;
+			font-size: 3vw;
+			font-weight: 200;
+			text-decoration: none;
+		}
+	</style>
+
+
+	<body>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+
+		<div class="circle-container">
+			<div id="Circle2" class="circle-x"></div>
+			<div id="Circle3" class="circle-x"></div>
+			<div id="Circle4" class="circle-x"></div>
+			<div id="Circle5" class="circle-x"></div>
+			<div id="Circle6" class="circle-x"></div>
+			<div id="Circle7" class="circle-x"></div>
+			<div id="Circle8" class="circle-x"></div>
+			<div id="Circle9" class="circle-x"></div>
+		</div>
+
+		<div class="reg-picture">
+			<img src="img/undraw_fill_in_mie5.svg" />
+		</div>
+
+		<div class="reg-form">
+			<div class="text-box">
+				<i class="material-icons">phone</i>
+				<input id="tel_input" type="tel" class="mui-input-clear mui-input" placeholder="手机号" maxlength="11">
+			</div>
+
+			<div class="text-box" id="ValiContainer">
+				<i class="material-icons">textsms</i>
+				<input id="ValidateInput" type="tel" class="mui-input-clear mui-input" placeholder="验证码" maxlength="4">
+				<div id="request" class="get-cap" onclick="getCaptcha()">获取验证码</div>
+			</div>
+
+			<div class="text-box">
+				<i class="material-icons">lock</i>
+				<input id="password1" type="password" class="mui-input-clear mui-input" maxlength="8" placeholder="密码">
+			</div>
+
+			<div class="text-box">
+				<i class="material-icons">lock</i>
+				<input id="password2" type="password" class="mui-input-clear mui-input" maxlength="8" placeholder="确认密码">
+			</div>
+
+			<form name="next" class="set-btn-container" onsubmit="Register();return false;" action="set-name.html">
+				<button type="submit" class="set-btn">注册</button>
+			</form>
+
+			<div class="mui-content-padded">
+				<div class="link-area">
+					<a href="login.html">已有帐号？</a>
+					<a id="Login" href="login.html">点击登陆</a>
+				</div>
+			</div>
+		</div>
+	</body>
+
+
+
+	<script type="text/javascript">
+		var captGotten = 0;
+
+		mui.plusReady(function() {});
+
+		function time(o) {
+			if (captGotten == 0) {
+				o.innerText = "获取验证码";
+				o.style.color = "var(--color-yellow)";
+			} else {
+				o.innerText = captGotten + "s";
+				o.style.color = "#cdcdcd";
+				captGotten--;
+				setTimeout(function() {
+					time(o, captGotten)
+				}, 1000)
+			}
+		}
+
+		function getCaptcha() {
+			if (captGotten || !validataPhoneNo())
+				return;
+			captGotten = 60;
+			time(request);
+			CallAJAX("getCapt", {
+				"phoneNo": tel_input.value
+			});
+		}
+
+		function validataPhoneNo() {
+			var regMobile = /^[1-9]\d{10}$/;
+			if (tel_input.value.length == 0) {
+				alert("请输入手机号");
+			} else if (!regMobile.test(tel_input.value)) {
+				alert("手机号输入错误");
+			} else {
+				return true;
+			}
+			return false;
+		}
+
+		function validate() {
+			if (password1.value != password2.value) {
+				alert("两次输入密码不同");
+			} else if (tel_input.value == "" || tel_input.value == null) {
+				alert("请输入手机号");
+			} else if (ValidateInput.value == "" || ValidateInput.value.length < 4) {
+				alert("请输入手机号");
+			} else if (password1.value.length <= 0) {
+				alert("请输入密码");
+			} else if (ValidateInput.value.length != 4) {
+				alert("验证码输入错误");
+			} else if (!validataPhoneNo()) {
+
+			} else {
+				return true;
+			}
+			return false;
+		}
+
+		function Register() {
+			if (!validate())
+				return;
+			console.log(JSON.stringify({
+				"phoneNo": tel_input.value.toString(),
+				"capt": ValidateInput.value.toString(),
+				"pswd": password1_input.value
+			}));
+			CallAJAX("doRegister", {
+				"phoneNo": tel_input.value.toString(),
+				"capt": ValidateInput.value.toString(),
+				"pswd": password1.value
+			}, function(data) {
+				if (data["res"] == "1") {
+					alert("手机号输入错误");
+				} else if (data["res"] == "2") {
+					alert("您填写的手机号已被注册");
+				} else if (data["res"] == "3") {
+					alert("验证码无效，请您核对收到的信息");
+				} else {
+					plus.storage.setItem("userHash", data["userHash"]);
+					location.replace('welcome-page.html');
+				}
+			});
+		}
+	</script>
+
+</html>

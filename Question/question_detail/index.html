@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/wjh_question.css">
+		<link rel="stylesheet" href="../../Common/css/ufun.css">
+		<link rel="stylesheet" type="text/css" href="../../Common/css/table_list.css" />
+		<script src="../../Common/js/mui.min.js"></script>
+		<script src="../../Common/js/jump.js"></script>
+		<script src="../../Common/js/table_list.js"></script>
+		<script src="../../Common/js/tools.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="js/wjh_question.js"></script>
+		<style type="text/css">
+			html {
+				background-color: #EEEEEE;
+			}
+			#MenuBackground {
+				display: none;
+				opacity: 0;
+				background-color: rgba(0, 0, 0, 0.5);
+				animation: menu_show;
+				animation-duration: 0.3s;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 50;
+			}
+
+			@keyframes menu_show {
+				0% {
+					opacity: 0;
+				}
+
+				100% {
+					opacity: 1;
+				}
+			}
+
+			#MenuBackground.show {
+				display: block;
+				opacity: 1;
+			}
+
+			#Menu {
+				position: absolute;
+				display: block;
+				top: unset;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 100vw;
+				max-height: fit-content;
+				background-color: white;
+				z-index: 51;
+				padding: 6vw;
+			}
+
+			.MenuBTN {
+				display: inline-block;
+				border-radius: 50%;
+				border: 1px solid black;
+				line-height: 7vw;
+				width: 8vw;
+				height: 8vw;
+				padding: 2vw;
+				margin: 0 2vw;
+			}
+
+			.MenuBTN i {
+				font-size: 8vw;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="Pull" style="display: none;"></div>
+		<header>
+			<div id="Left" class="BTN" onmouseup="ThisClose();">
+				<i class="material-icons">keyboard_arrow_left</i>
+			</div>
+			<div id="Title">问题详情</div>
+			<div id="Right" class="BTN" onmouseup="showMenu();">
+				<i class="material-icons">menu</i>
+			</div>
+		</header>
+
+		<div id="MenuBackground" onclick="hideMenu();">
+			<div id="Menu">
+				<div class="MenuBTN" onclick="editQues();">
+					<i class="material-icons">mode_edit</i>
+				</div>
+				<div class="MenuBTN" onclick="deleteQues();">
+					<i class="material-icons">delete</i>
+				</div>
+			</div>
+		</div>
+
+		<!--撑起顶部导航栏区域-->
+		<div id="QuesContent" class="mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--用户展示区-->
+				<section id="UserInfo">
+					<img class="User_head_img" id="HeadImg">
+					<div class="User_name" id="UserName">用户名</div>
+				</section>
+				<!--问题展示区-->
+				<section id="QuesCard">
+					<div id="QuesTitleLine">
+						<p id="QuesTitle"> </p>
+						<div class="right">
+							<div id="Reward"></div>
+							<div class="Gray_text" style="display: inline;">悬赏</div>
+						</div>
+					</div>
+					<div id="QuesTitleUnderline"></div>
+					<div id="Tags">
+						<div>山西大学</div>
+					</div>
+					<div id="QuesText"></div>
+					<div id="QuesFooter">
+						<p class="Gray_text" id="QuesLooked">
+							0 浏览
+						</p>
+					</div>
+				</section>
+				<!--状态区-->
+				<section id="QuesStatus">
+					<div id="StatusLine" class="Gray_bg">待回答</div>
+				</section>
+				<!--回答区-->
+				<section id="QuesAns">
+
+				</section>
+				<!--HTML模板区-->
+				<section id="HiddenSection" style="display: none;">
+					<!--回答信息卡-->
+					<div class="Ans_card">
+						<div class="Anser_info">
+							<img class="User_head_img">
+							<span class="User_name"></span>
+							<span class="Gray_text" style="margin-left: auto;"></span>
+						</div>
+						<p>
+							<!-- 回答内容 -->
+						</p>
+					</div>
+					<!--抢答用户卡-->
+					<div class="Appl_card">
+						<img src="" class="User_head_img">
+						<button class="Assign_Btn Theme_color Theme_color_dark_bg">指定</button>
+						<span class="User_name" style="line-height: 11vw;"></span>
+						<span class="Theme_color"></span>
+					</div>
+				</section>
+			</div>
+		</div>
+		<!--底部功能区-->
+		<footer id="FooterBox">
+			<div class="Theme_color_dark_bg" id="LikeBtn" style="width: 18vw;">
+				<img src="./img/like.png" class="Like_icon">
+				<div style="width: 12vw;">难题</div>
+				<!-- <img src="./img/dislike.png" class="Like_icon" style="float: right;"> -->
+			</div>
+			<div id="ReplyBtn" class="Btn Theme_color_bg">
+				<img src="./img/accept.png">
+				<span style>回复</span>
+			</div>
+			<div id="AcceptBtn" class="Btn Theme_color_bg">
+				<img src="./img/accept.png">
+				<span style>采纳</span>
+			</div>
+			<div id="ApplyBtn" class="Btn Theme_color_bg">
+				<img src="./img/accept.png">
+				<span style>抢答</span>
+			</div>
+			<!-- 收藏 -->
+			<!-- <div style="margin-left: auto;">
+					<img src="./img/save_norm.png" style="height: 8.3vw;">
+				</div> -->
+		</footer>
+		<script>
+			function showMenu() {
+				if (!isQuestioner) {
+					return;
+				}
+				ID('MenuBackground').classList.add("show");
+			}
+
+			function hideMenu() {
+				ID('MenuBackground').classList.remove("show");
+			}
+
+			function editQues() {
+				plus.webview.create(
+					'edit.html',
+					'QuesEdit', {}, {
+						'quesId': quesId,
+						'quesTitle': ID('QuesTitle').innerText,
+						'quesContent': ID('QuesText').innerText,
+						'quesReward': reward,
+					}
+				);
+			}
+
+			function deleteQues() {
+				CallAJAX("changeQues", {
+					"userHash": userHash,
+					"quesId": quesId,
+					"action": "delete"
+				}, function(data) {
+					if (data["res"] == "ok") {
+						mui.toast('问题删除成功');
+						mui.fire(current.opener(), 'Refresh');
+						ThisClose();
+					} else {
+						mui.alert('请检查网络设置', '删除失败');
+					}
+				}, function() {
+					mui.alert('请检查网络设置', '删除失败');
+				});
+			}
+		</script>
+	</body>
+</html>

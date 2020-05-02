@@ -1,0 +1,163 @@
+html {
+	/* 720px宽度下等同于24px */
+	font-size: 3.5vw;
+	/* font-family: 'Noto Sans SC', sans-serif; */
+	background-color: rgb(238, 238, 238);
+}
+
+header {
+	overflow: hidden!important;
+}
+
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	background-color: white;
+	height: 9vw;
+}
+
+.Theme_color_dark_bg {
+	background-color: #4B4A48;
+}
+
+.Theme_color_bg {
+	background-color: #FDD100;
+}
+
+.Theme_color {
+	color: #FDD100;
+}
+
+.Gray_text {
+	color: #BFBFBF
+}
+
+.Gray_bg {
+	background-color: #BFBFBF
+}
+
+.User_head_img {
+	height: 10vw;
+	width: 10vw;
+	float: left;
+	border-radius: 50%;
+	border: 1px solid #AAAAAA;
+	margin-right: 2.2vw;
+}
+
+.User_name {
+	float: left;
+	margin-right: 2vw;
+	font-size: 4vw;
+	font-weight: 300;
+}
+#LecCard,
+#UserInfo {
+	padding: 0 4.4vw;
+}
+
+#UserInfo {
+	height: 14vw;
+	display: flex;
+	align-items: center;
+	padding: 1.5vw 4.4vw 0.5vw 4.4vw;
+	/* border-bottom: 1px solid rgb(246, 246, 246); */
+	background-color: white;
+	border-bottom: 1px solid #EEE;
+}
+
+#LecCard {
+	background-color: white;
+	border: 1px solid white;
+}
+
+#LecCard #LecTitleLine {
+	margin-top: 2.6vw;
+}
+
+#LecCard #LecTitleLine #LecTitle {
+	display: inline;
+	font-weight: bold;
+	font-size: 1.5rem;
+	height: 1rem;
+}
+
+#LecCard #LecTitleUnderline {
+	height: 1vw;
+	width: 27.7vw;
+	border-radius: 0.5vw;
+	background-color: rgb(253, 209, 0);
+}
+
+#LecCard #Tags {
+	margin: 2.8vw auto;
+	display: flex;
+}
+
+#LecCard #Tags div {
+	margin-right: 3.3vw;
+	height: 4.5vw;
+	padding: 0 1.5vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.8rem;
+	border: 0.25vw solid black;
+	border-radius: 1.5vw;
+}
+
+#LecCard #LecFooter {
+	margin: 3.2vw 0;
+}
+
+#LecCard #LecFooter #LecLooked {
+	text-align: right;
+	font-size: 3vw;
+}
+#LecText {
+	font-size: 4vw;
+	margin-bottom: 3.3vw;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+}
+#LecContent {
+	opacity: 0;
+	transition: opacity 300ms;
+	overflow: hidden;
+}
+
+#FooterBox {
+	border-top: 1px solid rgb(246, 246, 246);
+	box-shadow: 0 0 2px #DDDDDD;
+	padding: 3vw 4vw 3vw 4vw;
+	display: flex;
+	background-color: white;
+	opacity: 0;
+	transition: opacity 300ms;
+}
+
+#LikeBtn {
+	height: 8vw;
+	line-height: 8vw;
+	width: 25vw;
+	color: white;
+	border-radius: 3.4vw;
+	display: inline-flex;
+	align-items: center;
+}
+
+#LikeBtn .Like_icon {
+	height: 2.5vw;
+	width: 2.5vw;
+	margin: 0 2.5vw;
+}
+
+#LikeBtn div {
+	height: 8.5vw;
+	display: flex;
+	align-items: center;
+	margin-right: 0.2vw;
+	font-size: 3.8vw;
+	text-shadow: 0 0 1px sandybrown;
+}
